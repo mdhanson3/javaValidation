@@ -23,10 +23,10 @@ public class FileValidator {
             System.out.println(path);
         }
 
-        /*
-        SingleLineValidator mySingleLineValidator = new SingleLineValidator();
-        List<String> listOfSingleLineErrors = mySingleLineValidator(arguments[0]);
-        */
+
+        SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
+        //List<String> listOfSingleLineErrors = mySingleLineValidator(arguments[0]);
+
         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
         List<String> multiLineErrors = myMultiLineValidator.runMultiLineValidation();
 

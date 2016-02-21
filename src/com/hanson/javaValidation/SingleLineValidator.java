@@ -9,9 +9,13 @@ import java.util.List;
  * Created by student on 2/10/16.
  */
 public class SingleLineValidator {
+    private String filePath = null;
 
-    public List<String> runSingleLineValidation(String path) {
-        String filePath = path;
+    SingleLineValidator(String path) {
+        filePath = path;
+    }
+
+    public List<String> runSingleLineValidation() {
         List<String> singleLineErrors = new ArrayList<String>();
 
         singleLineErrors = characterCountPerLine(filePath);
