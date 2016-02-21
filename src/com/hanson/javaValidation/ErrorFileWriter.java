@@ -10,12 +10,16 @@ import java.io.FileReader;
 public class ErrorFileWriter {
 
     public void writeMarkupFile(String file) {
+        String line = null;
+        String outputLine = "";
+        int lineNumber = 1;
         try(BufferedReader input = new BufferedReader(new FileReader(file));
                 BufferedWriter out = new BufferedWriter(new java.io.FileWriter("output/withHighlightedErrors.html"))) {
-            String line = null;
             while((line = input.readLine()) != null) {
-                out.write(line);
+                outputLine = "Line number " + lineNumber + " " + line;
+                out.write(outputLine);
                 out.newLine();
+                lineNumber ++;
             }
         } catch (IOException ioException) {
             System.out.println("Error writing the markup file");
