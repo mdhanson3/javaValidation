@@ -25,16 +25,16 @@ public class FileValidator {
 
 
         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
-        //List<String> listOfSingleLineErrors = mySingleLineValidator(arguments[0]);
+        mySingleLineValidator.runSingleLineValidation();
 
         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
-        List<String> multiLineErrors = myMultiLineValidator.runMultiLineValidation();
+        myMultiLineValidator.runMultiLineValidation();
 
-        System.out.println(multiLineErrors);
+        //System.out.println(multiLineErrors);
 
         ErrorFileWriter myWriter = new ErrorFileWriter();
         myWriter.writeMarkupFile(arguments[0]);
-        myWriter.writeSummaryFile("This is the summary", multiLineErrors);
+        //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
     }
 
     /**

@@ -10,30 +10,21 @@ import java.util.List;
  */
 public class SingleLineValidator {
     private String filePath = null;
+    private List<String[]> singleLineErrors = new ArrayList<>();
 
     SingleLineValidator(String path) {
         filePath = path;
     }
 
-    public List<String> runSingleLineValidation() {
-        List<String> singleLineErrors = new ArrayList<String>();
-
-        singleLineErrors = characterCountPerLine(filePath);
-
-        return singleLineErrors;
-    }
-
-    private List<String> characterCountPerLine(String filePath) {
-        int lineNumber = 0;
+    public void runSingleLineValidation() {
+        int lineNumber = 1;
         String lineText;
-        List<String> characterCountErrors = new ArrayList<String>();
 
+        // Check each line for each error.  If error is found, add error to array.
         try (BufferedReader input = new BufferedReader(new FileReader(filePath))) {
             while (input.ready()) {
-                lineText = input.readLine();
-                if (!characterTest(lineText)) {
-                    characterCountErrors.add("Line " + lineNumber + " has over 80 characters");
-                }
+                //lineText = ;
+                runErrorTests(input.readLine(), lineNumber);
                 lineNumber ++;
             }
         } catch (java.io.FileNotFoundException fnfe) {
@@ -44,14 +35,20 @@ public class SingleLineValidator {
             exception.printStackTrace();
         }
 
-        return characterCountErrors;
-
+        //characterCountPerLine();
     }
 
-    private boolean characterTest(String line) {
-        if (line.length() > 80) {
+    private void runErrorTests(String lineText, int lineNumber) {
+        if (!characterCountPerLine(lineText)) {
+            System.out.println(lineNumber);
+            System.out.println("TOo Long");
+        }
+    }
+    private boolean characterCountPerLine(String lineText) {
+        if (lineText.length() > 80) {
             return false;
         }
         return true;
+
     }
 }

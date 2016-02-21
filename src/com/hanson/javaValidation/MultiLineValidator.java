@@ -9,16 +9,15 @@ import java.util.*;
  */
 public class MultiLineValidator {
     private String filePath = null;
+    private List<String> multiLineErrors = new ArrayList<String>();
 
     MultiLineValidator(String path) {
         filePath = path;
     }
 
-    public List<String> runMultiLineValidation() {
-        List<String> multiLineErrors = new ArrayList<String>();
+    public void runMultiLineValidation() {
         multiLineErrors.add(lineCount());
         multiLineErrors.add(javadocErrors());
-        return multiLineErrors;
     }
 
     private String lineCount() {
