@@ -23,12 +23,13 @@ public class FileValidator {
             System.out.println(path);
         }
 
-
+        // Create validation objects using file provided by command line arg
         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
-        mySingleLineValidator.runSingleLineValidation();
-
         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
+
+        // Run both objects' validation methods
         myMultiLineValidator.runMultiLineValidation();
+        mySingleLineValidator.runSingleLineValidation();
 
         //System.out.println(multiLineErrors);
 
