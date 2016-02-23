@@ -18,37 +18,60 @@ public class SingleLineValidator {
 
     public void runSingleLineValidation() {
         int lineNumber = 1;
-        String lineText;
 
         // Check each line for each error.  If error is found, add error to array.
         try (BufferedReader input = new BufferedReader(new FileReader(filePath))) {
             while (input.ready()) {
-                //lineText = ;
-                runErrorTests(input.readLine(), lineNumber);
+                runErrorTests(lineNumber, input.readLine());
                 lineNumber ++;
             }
         } catch (java.io.FileNotFoundException fnfe) {
-            System.out.println("Failed to read input file");
+            System.out.println("Failed to read input file - File not found");
             fnfe.printStackTrace();
         } catch (Exception exception) {
-            System.out.println("General Error");
+            System.out.println("Failed to read input file - Generic Error");
             exception.printStackTrace();
         }
-
-        //characterCountPerLine();
     }
 
-    private void runErrorTests(String lineText, int lineNumber) {
-        if (!characterCountPerLine(lineText)) {
-            System.out.println(lineNumber);
-            System.out.println("TOo Long");
-        }
+    private void runErrorTests(int lineNumber, String lineText) {
+        // These test check all text regardless of quotes or comments
+        characterCountPerLine(lineNumber, lineText);
+
+        /*
+        TODO: Strip unnecessary text (comments, multi-line comments, java-doc comments, text in quotes, text in double-quotes)
+        Consider:  How will this affect line numbers, character indices for producing output
+        */
+
+        // The tests below should not check text between quotes, comments, and after comments.
+        testKeywordSpacing(lineNumber, lineText);
+
     }
-    private boolean characterCountPerLine(String lineText) {
+
+    private void characterCountPerLine(int lineNumber, String lineText) {
         if (lineText.length() > 80) {
-            return false;
+            createError(lineNumber, "Line over 80 characters.");
         }
-        return true;
+    }
 
+    private void testKeywordSpacing(int lineNumber, String lineText) {
+        // Ignore characters in between '', "", and /* */, and after //
+        // look for while
+        // If next character is not a space, produce while error
+    }
+
+    private void createError(int lineNumber, String error) {
+        System.out.println(lineNumber + " " + error);
+        String[] tempArray = new String[2];
+        tempArray[0] = String.valueOf(lineNumber);
+        tempArray[1] = error;
+        singleLineErrors.add(tempArray);
+    }
+
+    public void outputErrors() {
+        for (String[] tempArray :
+                singleLineErrors) {
+            System.out.println("Line " + tempArray[0] + " " + tempArray[1]);
+        }
     }
 }

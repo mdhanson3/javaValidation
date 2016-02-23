@@ -32,6 +32,7 @@ public class FileValidator {
         mySingleLineValidator.runSingleLineValidation();
 
         //System.out.println(multiLineErrors);
+        mySingleLineValidator.outputErrors();
 
         ErrorFileWriter myWriter = new ErrorFileWriter();
         myWriter.writeMarkupFile(arguments[0]);
