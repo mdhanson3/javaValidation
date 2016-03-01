@@ -1,7 +1,6 @@
 package com.hanson.javaValidation;
 
 import java.io.*;
-import java.util.*;
 
 /**
  * Created by student on 2/9/16.
@@ -22,6 +21,13 @@ public class FileValidator {
             System.out.println(arguments[0]);
             System.out.println(path);
         }
+
+        // Create and run fileParser
+        FileParser myFileParser = new FileParser(arguments[0]);
+
+        // Create fileInformation object and run its main method
+        FileInformation myFileInformation = new FileInformation(myFileParser);
+        myFileInformation.runFileParser();
 
         // Create validation objects using file provided by command line arg
         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);

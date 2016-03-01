@@ -5,13 +5,58 @@ Line number 4  *
 Line number 5  */
 Line number 6 
 Line number 7 public class someClass {
-Line number 8 
-Line number 9 }
+Line number 8     private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
+Line number 9     private final boolean DEBUG = true;
 Line number 10 
-Line number 11 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
-Line number 12 
-Line number 13 
-Line number 14 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
-Line number 15 
+Line number 11     public void runValidation(String[] arguments) {
+Line number 12         // Check number of args
+Line number 13         if (!numberOfArgumentsPassed(arguments)) {
+Line number 14             return;
+Line number 15         }
 Line number 16 
-Line number 17 .
+Line number 17         if (DEBUG) {
+Line number 18             File file = new File(arguments[0]);
+Line number 19             String path = file.getAbsolutePath();
+Line number 20             System.out.println(arguments[0]);
+Line number 21             System.out.println(path);
+Line number 22         }
+Line number 23 
+Line number 24         // Create validation objects using file provided by command line arg
+Line number 25         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
+Line number 26         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
+Line number 27 
+Line number 28         // Run both objects' validation methods
+Line number 29         myMultiLineValidator.runMultiLineValidation();
+Line number 30         mySingleLineValidator.runSingleLineValidation();
+Line number 31 
+Line number 32         //System.out.println(multiLineErrors);
+Line number 33         mySingleLineValidator.outputErrors();
+Line number 34 
+Line number 35         ErrorFileWriter myWriter = new ErrorFileWriter();
+Line number 36         myWriter.writeMarkupFile(arguments[0]);
+Line number 37         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
+Line number 38     }
+Line number 39 
+Line number 40     /**
+Line number 41      * Checks that the number of arguments passed to the application is correct
+Line number 42      *
+Line number 43      * @param arguments arguments passed to the application
+Line number 44      * @return returns true if the number of arguments passed is correct
+Line number 45      */
+Line number 46     private boolean numberOfArgumentsPassed(String[] arguments) {
+Line number 47         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
+Line number 48             return true;
+Line number 49         } else {
+Line number 50             System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run*//. Exiting application");
+Line number 51             return false;
+Line number 52         }
+Line number 53     }
+Line number 54 }
+Line number 55 
+Line number 56 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 57 
+Line number 58 
+Line number 59 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 60 
+Line number 61 
+Line number 62 .
