@@ -89,7 +89,7 @@ public class FileInformation {
 
     private void checkKeyword(int lineNumber, String lineText, String keyword) {
         if (lineText.contains(keyword)) {
-            System.out.println("found: " + keywordDecoder.decodeKeyword(keyword) + ". On line " + lineNumber);
+            System.out.println("found type: " + keywordDecoder.decodeKeyword(keyword) + ". On line " + lineNumber + ".  Keyword: " + keyword);
             addLineInformation(lineNumber, keywordDecoder.decodeKeyword(keyword));
         }
     }
