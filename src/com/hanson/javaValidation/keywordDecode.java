@@ -3,7 +3,7 @@ package com.hanson.javaValidation;
 /**
  * Created by student on 3/2/16.
  */
-public class keywordDecode {
+public final class keywordDecode {
 
     public static int decodeKeyword(String keyword) {
         int code = -1;
