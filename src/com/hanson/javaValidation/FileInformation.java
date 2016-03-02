@@ -10,8 +10,9 @@ import java.util.*;
  * Created by student on 3/1/16.
  */
 public class FileInformation {
+    private final int javadocCode = 1;
     private FileParser fileParser;
-    private List<String[]> lineInformation;
+    private List<int[]> lineInformation;
     private List<Integer> javadocComments;
 
     private boolean previousLineJavadocComment = false;
@@ -48,9 +49,14 @@ public class FileInformation {
 
     private void checkJavadocComment(int lineNumber, String lineText) {
         if (lineText.contains("/*")) {
-            System.out.println("Javadoc starts in line: " + lineNumber);
+            addLineInformation(lineNumber, javadocCode);
         }
     }
 
+    private void addLineInformation(int lineNumber, int lineCode) {
+        int[] tempArray = {lineNumber, lineCode};
+        lineInformation.add(tempArray);
+        System.out.println(tempArray[0]);
+    }
 
 }
