@@ -58,32 +58,35 @@ Line number 57         mySingleLineValidator.runSingleLineValidation();
 Line number 58 
 Line number 59         //System.out.println(multiLineErrors);
 Line number 60         mySingleLineValidator.outputErrors();
-Line number 61 
-Line number 62         ErrorFileWriter myWriter = new ErrorFileWriter();
-Line number 63         myWriter.writeMarkupFile(arguments[0]);
-Line number 64         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
-Line number 65     }
-Line number 66 
-Line number 67     /**
-Line number 68      * Checks that the number of arguments passed to the application is correct
-Line number 69      *
-Line number 70      * @param arguments arguments passed to the application
-Line number 71      * @return returns true if the number of arguments passed is correct
-Line number 72      */
-Line number 73     private boolean numberOfArgumentsPassed(String[] arguments) {
-Line number 74         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
-Line number 75             return true;
-Line number 76         } else {
-Line number 77             System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run*//. Exiting application");
-Line number 78             return false;
-Line number 79         }
-Line number 80     }
-Line number 81 }
-Line number 82 
-Line number 83 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
-Line number 84 
+Line number 61         /** bunch of stuff */
+Line number 62 
+Line number 63         ErrorFileWriter myWriter = new ErrorFileWriter();  //this does something "and something quoted" /* */ //
+Line number 64         myWriter.writeMarkupFile(arguments[0]);
+Line number 65         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
+Line number 66     }
+Line number 67 
+Line number 68     /**
+Line number 69      * Checks that the "number of arguments passed to the application is correct
+Line number 70      *
+Line number 71      * @param arguments arguments passed to the application
+Line number 72      * @return returns true if the number of arguments passed is correct
+Line number 73      */
+Line number 74 
+Line number 75 
+Line number 76     private boolean numberOfArgumentsPassed(String[] arguments) {
+Line number 77         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
+Line number 78             return true;
+Line number 79         } else {
+Line number 80             System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run//. Exiting application");  /* " */
+Line number 81             return false;
+Line number 82         }
+Line number 83     }
+Line number 84 }
 Line number 85 
 Line number 86 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
 Line number 87 
 Line number 88 
-Line number 89 .
+Line number 89 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 90 
+Line number 91 
+Line number 92 .

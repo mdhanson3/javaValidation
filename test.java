@@ -58,23 +58,26 @@ public class someClass {
 
         //System.out.println(multiLineErrors);
         mySingleLineValidator.outputErrors();
+        /** bunch of stuff */
 
-        ErrorFileWriter myWriter = new ErrorFileWriter();
+        ErrorFileWriter myWriter = new ErrorFileWriter();  //this does something "and something quoted" /* */ //
         myWriter.writeMarkupFile(arguments[0]);
         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
     }
 
     /**
-     * Checks that the number of arguments passed to the application is correct
+     * Checks that the "number of arguments passed to the application is correct
      *
      * @param arguments arguments passed to the application
      * @return returns true if the number of arguments passed is correct
      */
+
+
     private boolean numberOfArgumentsPassed(String[] arguments) {
         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
             return true;
         } else {
-            System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run*//. Exiting application");
+            System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run//. Exiting application");  /* " */
             return false;
         }
     }

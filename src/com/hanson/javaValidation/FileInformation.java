@@ -10,7 +10,7 @@ import java.util.*;
  * Created by student on 3/1/16.
  */
 public class FileInformation {
-    private final int JAVADOC_CODE = 1;
+    private final int JAVADOC_CODE = -1;
     private final int FOR_CODE = 2;
     private final int MULTI_LINE_COMMENT_CODE = 0;
     private final String[] keywords = {" for", " if", " else", " else if", " while", " do", " try", " catch", " do while"};
