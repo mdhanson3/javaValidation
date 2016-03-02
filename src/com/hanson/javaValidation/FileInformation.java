@@ -23,16 +23,20 @@ public class FileInformation {
         fileParser = parser;
     }
 
+    public List getLineINformation() {
+        return lineInformation;
+    }
+
     /**
      * Stores information about its file in a list.
      */
-    public void runFileParser() {
+    public void runFileInformation() {
         previousLineJavadocComment = false;
         javadocCommentOpen = false;
 
         List<String> fileContents = fileParser.getFileContents();
-
-        for(int index = 0; index <= fileContents.size(); index ++) {
+        System.out.println(fileContents.size());
+        for (int index = 0; index < fileContents.size(); index ++) {
             runInfoGatherers(index + 1, fileContents.get(index));
         }
 
@@ -43,10 +47,10 @@ public class FileInformation {
     }
 
     private void checkJavadocComment(int lineNumber, String lineText) {
-
+        if (lineText.contains("/*")) {
+            System.out.println("Javadoc starts in line: " + lineNumber);
+        }
     }
 
-    public List getLineINformation() {
-        return lineInformation;
-    }
+
 }

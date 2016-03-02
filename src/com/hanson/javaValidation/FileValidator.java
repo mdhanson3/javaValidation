@@ -24,10 +24,11 @@ public class FileValidator {
 
         // Create and run fileParser
         FileParser myFileParser = new FileParser(arguments[0]);
+        myFileParser.runFileParser();
 
         // Create fileInformation object and run its main method
-        FileInformation myFileInformation = new FileInformation();
-        myFileInformation.runFileParser(myFileParser);
+        FileInformation myFileInformation = new FileInformation(myFileParser);
+        myFileInformation.runFileInformation();
 
         // Create validation objects using file provided by command line arg
         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
