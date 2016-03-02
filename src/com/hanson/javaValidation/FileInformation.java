@@ -11,20 +11,25 @@ import java.util.*;
  */
 public class FileInformation {
     private FileParser fileParser;
-    private List<String[]> lineInformation = new ArrayList<>();
-    private List<Integer> javadocComments = new ArrayList<>();
+    private List<String[]> lineInformation;
+    private List<Integer> javadocComments;
 
     private boolean previousLineJavadocComment = false;
     private boolean javadocCommentOpen = false;
 
-    FileInformation(FileParser contents) {
-        fileParser = contents;
+    FileInformation(FileParser parser) {
+        lineInformation = new ArrayList<>();
+        javadocComments = new ArrayList<>();
+        fileParser = parser;
     }
 
     /**
      * Stores information about its file in a list.
      */
     public void runFileParser() {
+        previousLineJavadocComment = false;
+        javadocCommentOpen = false;
+
         List<String> fileContents = fileParser.getFileContents();
 
         for(int index = 0; index <= fileContents.size(); index ++) {
