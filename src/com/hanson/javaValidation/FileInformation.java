@@ -46,7 +46,6 @@ public class FileInformation {
         for (int index = 0; index < fileContents.size(); index ++) {
             runInfoGatherers(index + 1, fileContents.get(index));
         }
-
     }
 
     private void runInfoGatherers(int lineNumber, String lineText) {
@@ -54,7 +53,6 @@ public class FileInformation {
         for (String keyword : keywords) {
             checkKeyword(lineNumber, lineText, keyword);
         }
-
     }
 
     private void checkJavadocComment(int lineNumber, String lineText) {
