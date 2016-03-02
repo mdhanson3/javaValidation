@@ -31,42 +31,48 @@ Line number 30             // do something
 Line number 31             break;
 Line number 32         }
 Line number 33 
-Line number 34         // Create validation objects using file provided by command line arg
-Line number 35         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
-Line number 36         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
+Line number 34         /*
+Line number 35 
+Line number 36             Random multi-line comment
 Line number 37 
-Line number 38         // Run both objects' validation methods
-Line number 39         myMultiLineValidator.runMultiLineValidation();
-Line number 40         mySingleLineValidator.runSingleLineValidation();
-Line number 41 
-Line number 42         //System.out.println(multiLineErrors);
-Line number 43         mySingleLineValidator.outputErrors();
-Line number 44 
-Line number 45         ErrorFileWriter myWriter = new ErrorFileWriter();
-Line number 46         myWriter.writeMarkupFile(arguments[0]);
-Line number 47         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
-Line number 48     }
-Line number 49 
-Line number 50     /**
-Line number 51      * Checks that the number of arguments passed to the application is correct
-Line number 52      *
-Line number 53      * @param arguments arguments passed to the application
-Line number 54      * @return returns true if the number of arguments passed is correct
-Line number 55      */
-Line number 56     private boolean numberOfArgumentsPassed(String[] arguments) {
-Line number 57         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
-Line number 58             return true;
-Line number 59         } else {
-Line number 60             System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run*//. Exiting application");
-Line number 61             return false;
-Line number 62         }
-Line number 63     }
-Line number 64 }
-Line number 65 
-Line number 66 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
-Line number 67 
-Line number 68 
-Line number 69 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
-Line number 70 
+Line number 38         */
+Line number 39          */
+Line number 40         // Create validation objects using file provided by command line arg
+Line number 41         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
+Line number 42         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
+Line number 43 
+Line number 44         // Run both objects' validation methods
+Line number 45         myMultiLineValidator.runMultiLineValidation();
+Line number 46         mySingleLineValidator.runSingleLineValidation();
+Line number 47 
+Line number 48         //System.out.println(multiLineErrors);
+Line number 49         mySingleLineValidator.outputErrors();
+Line number 50 
+Line number 51         ErrorFileWriter myWriter = new ErrorFileWriter();
+Line number 52         myWriter.writeMarkupFile(arguments[0]);
+Line number 53         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
+Line number 54     }
+Line number 55 
+Line number 56     /**
+Line number 57      * Checks that the number of arguments passed to the application is correct
+Line number 58      *
+Line number 59      * @param arguments arguments passed to the application
+Line number 60      * @return returns true if the number of arguments passed is correct
+Line number 61      */
+Line number 62     private boolean numberOfArgumentsPassed(String[] arguments) {
+Line number 63         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
+Line number 64             return true;
+Line number 65         } else {
+Line number 66             System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run*//. Exiting application");
+Line number 67             return false;
+Line number 68         }
+Line number 69     }
+Line number 70 }
 Line number 71 
-Line number 72 .
+Line number 72 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 73 
+Line number 74 
+Line number 75 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 76 
+Line number 77 
+Line number 78 .

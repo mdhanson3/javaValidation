@@ -31,6 +31,12 @@ public class someClass {
             break;
         }
 
+        /*
+
+            Random multi-line comment
+
+        */
+         */
         // Create validation objects using file provided by command line arg
         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);

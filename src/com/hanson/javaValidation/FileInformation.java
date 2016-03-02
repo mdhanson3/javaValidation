@@ -12,13 +12,15 @@ import java.util.*;
 public class FileInformation {
     private final int JAVADOC_CODE = 1;
     private final int FOR_CODE = 2;
-    private final String[] keywords = {"for", "if", "else", "else if", "while", "do"};
+    private final int MULTI_LINE_COMMENT_CODE = 0;
+    private final String[] keywords = {" for", " if", " else", " else if", " while", " do"};
     private FileParser fileParser;
     private List<int[]> lineInformation;
     private List<Integer> javadocComments;
 
-    private boolean previousLineJavadocComment = false;
+    //private boolean previousLineJavadocComment = false;
     private boolean javadocCommentOpen = false;
+    private boolean multiLineCommentOpen = false;
 
     FileInformation(FileParser parser) {
         lineInformation = new ArrayList<>();
@@ -31,11 +33,12 @@ public class FileInformation {
     }
 
     /**
-     * Stores information about its file in a list.
+     * Stores information about the file in a list.
      */
     public void runFileInformation() {
-        previousLineJavadocComment = false;
+        //previousLineJavadocComment = false;
         javadocCommentOpen = false;
+        multiLineCommentOpen = false;
 
         List<String> fileContents = fileParser.getFileContents();
         System.out.println(fileContents.size());
@@ -54,8 +57,32 @@ public class FileInformation {
     }
 
     private void checkJavadocComment(int lineNumber, String lineText) {
-        if (lineText.contains("/*")) {
+        if (javadocCommentOpen) {
+            if (lineText.contains("*/")) {
+                javadocCommentOpen = false;
+            }
             addLineInformation(lineNumber, JAVADOC_CODE);
+        }
+        else if (lineText.contains("/**")) {
+            javadocCommentOpen = true;
+            addLineInformation(lineNumber, JAVADOC_CODE);
+        }
+
+        else {
+            checkMultiLineComment(lineNumber, lineText);
+        }
+    }
+
+    private void checkMultiLineComment(int lineNumber, String lineText) {
+        if (multiLineCommentOpen) {
+            if (lineText.contains("*/")) {
+                multiLineCommentOpen = false;
+            }
+            addLineInformation(lineNumber, MULTI_LINE_COMMENT_CODE);
+        }
+        else if (lineText.contains("/*")) {
+            multiLineCommentOpen = true;
+            addLineInformation(lineNumber, MULTI_LINE_COMMENT_CODE);
         }
     }
 
@@ -69,6 +96,12 @@ public class FileInformation {
     private void addLineInformation(int lineNumber, int lineCode) {
         int[] tempArray = {lineNumber, lineCode};
         lineInformation.add(tempArray);
+    }
+
+    public void debugTerminalOutput () {
+        for (int i = 0; i < lineInformation.size(); i++) {
+            System.out.println("Line type: " + lineInformation.get(i)[1] + ". On line: " + lineInformation.get(i)[0]);
+        }
     }
 
 }

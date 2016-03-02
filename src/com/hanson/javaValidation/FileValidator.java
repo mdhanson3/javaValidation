@@ -44,6 +44,10 @@ public class FileValidator {
         ErrorFileWriter myWriter = new ErrorFileWriter();
         myWriter.writeMarkupFile(arguments[0]);
         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
+
+        if (DEBUG) {
+            myFileInformation.debugTerminalOutput();
+        }
     }
 
     /**
