@@ -47,7 +47,10 @@ public class FileInformation {
 
     private void runInfoGatherers(int lineNumber, String lineText) {
         checkJavadocComment(lineNumber, lineText);
-        checkKeyword(lineNumber, lineText, FOR_CODE, "for");
+        for (String keyword : keywords) {
+            checkKeyword(lineNumber, lineText, FOR_CODE, keyword);
+        }
+
     }
 
     private void checkJavadocComment(int lineNumber, String lineText) {
@@ -58,7 +61,7 @@ public class FileInformation {
 
     private void checkKeyword(int lineNumber, String lineText, int code, String keyword) {
         if (lineText.contains(keyword)) {
-            System.out.println("found: " + keyword + ". On line ");
+            System.out.println("found: " + keyword + ". On line " + lineNumber);
             addLineInformation(lineNumber, code);
         }
     }
@@ -66,7 +69,6 @@ public class FileInformation {
     private void addLineInformation(int lineNumber, int lineCode) {
         int[] tempArray = {lineNumber, lineCode};
         lineInformation.add(tempArray);
-        System.out.println(tempArray[0]);
     }
 
 }

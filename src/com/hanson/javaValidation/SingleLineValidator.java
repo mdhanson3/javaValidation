@@ -61,7 +61,6 @@ public class SingleLineValidator {
     }
 
     private void createError(int lineNumber, String error) {
-        System.out.println(lineNumber + " " + error);
         String[] tempArray = new String[2];
         tempArray[0] = String.valueOf(lineNumber);
         tempArray[1] = error;

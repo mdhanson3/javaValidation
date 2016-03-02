@@ -19,6 +19,16 @@ public class someClass {
             String path = file.getAbsolutePath();
             System.out.println(arguments[0]);
             System.out.println(path);
+        } else if (true) {
+            // stuff
+        } else {
+            // other stuff
+
+        }
+
+        while (true) {
+            // do something
+            break;
         }
 
         // Create validation objects using file provided by command line arg
