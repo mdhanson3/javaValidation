@@ -4,6 +4,17 @@ import java.util.*
  *
  */
 
+" for",
+        " if",
+        " else",
+        " else if",
+        " while",
+        " do",
+        " try",
+        " catch",
+        " do while"
+
+
 public class someClass {
     private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
     private final boolean DEBUG = true;

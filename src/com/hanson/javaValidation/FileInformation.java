@@ -14,6 +14,7 @@ public class FileInformation {
     private final int FOR_CODE = 2;
     private final int MULTI_LINE_COMMENT_CODE = 0;
     private final String[] keywords = {" for", " if", " else", " else if", " while", " do", " try", " catch", " do while"};
+    private final keywordDecode keywordDecoder = new keywordDecode();
     private FileParser fileParser;
     private List<int[]> lineInformation;
     private List<Integer> javadocComments;
@@ -51,7 +52,7 @@ public class FileInformation {
     private void runInfoGatherers(int lineNumber, String lineText) {
         checkJavadocComment(lineNumber, lineText);
         for (String keyword : keywords) {
-            checkKeyword(lineNumber, lineText, FOR_CODE, keyword);
+            checkKeyword(lineNumber, lineText, keyword);
         }
 
     }
@@ -86,10 +87,10 @@ public class FileInformation {
         }
     }
 
-    private void checkKeyword(int lineNumber, String lineText, int code, String keyword) {
+    private void checkKeyword(int lineNumber, String lineText, String keyword) {
         if (lineText.contains(keyword)) {
-            System.out.println("found: " + keyword + ". On line " + lineNumber);
-            addLineInformation(lineNumber, code);
+            System.out.println("found: " + keywordDecoder.decodeKeyword(keyword) + ". On line " + lineNumber);
+            addLineInformation(lineNumber, keywordDecoder.decodeKeyword(keyword));
         }
     }
 
