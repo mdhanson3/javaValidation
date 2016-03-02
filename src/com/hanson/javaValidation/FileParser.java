@@ -19,7 +19,6 @@ public class FileParser {
 
     public void runFileParser() {
         try (BufferedReader input = new BufferedReader(new FileReader(filePath))) {
-            System.out.println("In buffered reader try");
             while (input.ready()) {
                 fileContents.add(input.readLine());
             }

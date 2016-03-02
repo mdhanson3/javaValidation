@@ -10,7 +10,8 @@ import java.util.*;
  * Created by student on 3/1/16.
  */
 public class FileInformation {
-    private final int javadocCode = 1;
+    private final int JAVADOC_CODE = 1;
+    private final int FOR_CODE = 2;
     private FileParser fileParser;
     private List<int[]> lineInformation;
     private List<Integer> javadocComments;
@@ -45,11 +46,19 @@ public class FileInformation {
 
     private void runInfoGatherers(int lineNumber, String lineText) {
         checkJavadocComment(lineNumber, lineText);
+        checkKeyword(lineNumber, lineText, FOR_CODE, "for");
     }
 
     private void checkJavadocComment(int lineNumber, String lineText) {
         if (lineText.contains("/*")) {
-            addLineInformation(lineNumber, javadocCode);
+            addLineInformation(lineNumber, JAVADOC_CODE);
+        }
+    }
+
+    private void checkKeyword(int lineNumber, String lineText, int code, String keyword) {
+        if (lineText.contains(keyword)) {
+            System.out.println("found: " + keyword + ". On line: " + lineNumber);
+            addLineInformation(lineNumber, code);
         }
     }
 
