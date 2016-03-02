@@ -12,6 +12,7 @@ import java.util.*;
 public class FileInformation {
     private final int JAVADOC_CODE = 1;
     private final int FOR_CODE = 2;
+    private final String[] keywords = {"for", "if", "else", "else if", "while", "do"};
     private FileParser fileParser;
     private List<int[]> lineInformation;
     private List<Integer> javadocComments;
@@ -57,7 +58,7 @@ public class FileInformation {
 
     private void checkKeyword(int lineNumber, String lineText, int code, String keyword) {
         if (lineText.contains(keyword)) {
-            System.out.println("found: " + keyword + ". On line: " + lineNumber);
+            System.out.println("found: " + keyword + ". On line ");
             addLineInformation(lineNumber, code);
         }
     }
