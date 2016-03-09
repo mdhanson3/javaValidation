@@ -21,9 +21,13 @@ public class FileInformation {
     private List<int[]> lineInformation;
     private List<Integer> javadocComments;
 
-    //************************************/
+    //private boolean previousLineJavadocComment = false;
+    private boolean javadocCommentOpen = false;
+    private boolean multiLineCommentOpen = false;
+
+    //******************************************************************************************************/
     // These variables are for finding class bounds.  Should be refactored into its own class most likely.
-    //************************************
+    //******************************************************************************************************
     private Boolean foundClassBounds = false;
     private Boolean foundOpeningClassLine = false;
     private int openBrackets;
@@ -36,11 +40,24 @@ public class FileInformation {
     private List<int[]> functionBounds = new ArrayList<>();
     private int openingFunctionLine = 0;
     private int closingFunctionLine = 0;
-     //************************************************
+    //******************************************************************************************************
+    //******************************************************************************************************
 
-    //private boolean previousLineJavadocComment = false;
-    private boolean javadocCommentOpen = false;
-    private boolean multiLineCommentOpen = false;
+    //******************************************************************************************************/
+    // These variables are for striping comment and quoted text.  Should be refactored into its own class most likely.
+    //******************************************************************************************************
+    private Boolean openQuote = false;
+    private Boolean openMultiLineComment = false;
+    private Boolean oenJavadocComment = false;
+    private Boolean afterSingleLineComment = false;
+    private Boolean previousCharacterIsEscape = false;
+    private List<int[]> charactersToRemove;
+    private List<Integer> linesToReplace;
+
+
+    //******************************************************************************************************
+    //******************************************************************************************************
+
 
     FileInformation(FileParser parser) {
         lineInformation = new ArrayList<>();
