@@ -11,13 +11,22 @@ import java.util.*;
  */
 public class FileInformation {
     private final int JAVADOC_CODE = -1;
-    private final int FOR_CODE = 2;
     private final int MULTI_LINE_COMMENT_CODE = 0;
     private final String[] keywords = {" for", " if", " else", " else if", " while", " do", " try", " catch", " do while"};
     //private final keywordDecode keywordDecoder = new keywordDecode();
     private FileParser fileParser;
     private List<int[]> lineInformation;
     private List<Integer> javadocComments;
+
+    //************************************/
+    // These variables are for finding class bounds.  Should be refactored into its own class most likely.
+    //************************************
+    private Boolean foundClassBounds = false;
+    private Boolean foundOpeningClassLine = false;
+    private int openBrackets;
+    private int openingClassLine = 0;
+    private int closingClassLine = 0;
+     /************************************************/
 
     //private boolean previousLineJavadocComment = false;
     private boolean javadocCommentOpen = false;
@@ -50,6 +59,7 @@ public class FileInformation {
 
     private void runInfoGatherers(int lineNumber, String lineText) {
         checkJavadocComment(lineNumber, lineText);
+        findClassBounds(lineNumber, lineText);
         for (String keyword : keywords) {
             checkKeyword(lineNumber, lineText, keyword);
         }
@@ -102,5 +112,29 @@ public class FileInformation {
             System.out.println("Line type: " + lineInformation.get(i)[1] + ". On line: " + lineInformation.get(i)[0]);
         }
     }
+
+    public void findClassBounds(int lineNumber, String lineText) {
+        if (!foundClassBounds) {
+            if (foundOpeningClassLine) {
+                if (lineText.contains("{")) {
+                    openBrackets++;
+                } else if (lineText.contains("}")) {
+                    openBrackets--;
+                }
+
+                if (openBrackets == 0) {
+                    closingClassLine = lineNumber;
+                    foundClassBounds = true;
+                }
+            } else {
+                if (lineText.contains("{")) {
+                    foundOpeningClassLine = true;
+                    openBrackets = 1;
+                    openingClassLine = lineNumber;
+                }
+            }
+        }
+    }
+
 
 }
