@@ -82,6 +82,17 @@ public class someClass {
             return false;
         }
     }
+
+    public void function() {
+
+    }
+
+    public void anotherFunction() {
+
+
+
+
+    }
 }
 
 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********

@@ -7,7 +7,7 @@ import java.io.*;
  */
 public class FileValidator {
     private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
 
     public void runValidation(String[] arguments) {
         // Check number of args

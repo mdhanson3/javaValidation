@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class MultiLineValidator {
     private String filePath = null;
-    private List<String> multiLineErrors = new ArrayList<String>();
+    private List<String> multiLineErrors = new ArrayList<>();
 
     MultiLineValidator(String path) {
         filePath = path;

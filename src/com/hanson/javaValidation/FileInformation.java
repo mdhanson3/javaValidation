@@ -1,5 +1,6 @@
 package com.hanson.javaValidation;
 
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap;
 import com.sun.org.apache.xpath.internal.SourceTree;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.*;
 public class FileInformation {
     private final int JAVADOC_CODE = -1;
     private final int MULTI_LINE_COMMENT_CODE = 0;
-    private final String[] keywords = {" for", " if", " else", " else if", " while", " do", " try", " catch", " do while"};
+    private List<String> keywords;
     //private final keywordDecode keywordDecoder = new keywordDecode();
     private FileParser fileParser;
     private List<int[]> lineInformation;
@@ -35,7 +36,7 @@ public class FileInformation {
     private List<int[]> functionBounds = new ArrayList<>();
     private int openingFunctionLine = 0;
     private int closingFunctionLine = 0;
-     /************************************************/
+     //************************************************
 
     //private boolean previousLineJavadocComment = false;
     private boolean javadocCommentOpen = false;
@@ -44,6 +45,7 @@ public class FileInformation {
     FileInformation(FileParser parser) {
         lineInformation = new ArrayList<>();
         javadocComments = new ArrayList<>();
+        keywords = new ArrayList<>();
         fileParser = parser;
     }
 
@@ -60,6 +62,8 @@ public class FileInformation {
         multiLineCommentOpen = false;
 
         List<String> fileContents = fileParser.getFileContents();
+        generateKeywordList();
+
         System.out.println(fileContents.size());
         for (int index = 0; index < fileContents.size(); index ++) {
             runInfoGatherers(index + 1, fileContents.get(index));
@@ -199,5 +203,34 @@ public class FileInformation {
         }
     }
 
+    // Enum of keywords to search for
+    private enum Keyword {
+        FOR(" for"),
+        IF(" if"),
+        ELSE(" else"),
+        ELSE_IF(" else if"),
+        WHILE(" while"),
+        DO(" do"),
+        TRY(" try"),
+        CATCH(" catch"),
+        DO_WHILE(" do while");
+
+        private String value;
+
+        private Keyword(String value) {
+            this.value = value;
+        }
+
+        public String getKeywordString() {
+            return value;
+        }
+
+    }
+
+    private void generateKeywordList() {
+        for (Keyword key : Keyword.values()) {
+            keywords.add(key.getKeywordString());
+        }
+    }
 
 }
