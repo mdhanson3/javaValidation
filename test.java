@@ -67,7 +67,7 @@ public class someClass {
     }
 
     /**
-     * Checks that the "number of arguments passed to the application is correct
+     * Checks that the number of arguments passed to the application is correct
      *
      * @param arguments arguments passed to the application
      * @return returns true if the number of arguments passed is correct
@@ -78,7 +78,7 @@ public class someClass {
         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
             return true;
         } else {
-            System.out.println("This program //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run//. Exiting application");  /* " */
+            System.out.println("This prog\"ram //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run//. Exiting application");  /* " */
             return false;
         }
     }

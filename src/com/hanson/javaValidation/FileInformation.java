@@ -19,6 +19,8 @@ public class FileInformation {
     private List<int[]> lineInformation;
     private List<Integer> javadocComments;
 
+    private List<String> fileContents;
+
     //private boolean previousLineJavadocComment = false;
     private boolean javadocCommentOpen = false;
     private boolean multiLineCommentOpen = false;
@@ -42,15 +44,17 @@ public class FileInformation {
     //******************************************************************************************************
 
     //******************************************************************************************************/
-    // These variables are for striping comment and quoted text.  Should be refactored into its own class most likely.
+    // These variables are for stripping comment and quoted text.  Should be refactored into its own class most likely.
     //******************************************************************************************************
     private Boolean openQuote = false;
+    private int quoteOpenIndex;
+    private List<String> quotedTextArray = new ArrayList<>();
     private Boolean openMultiLineComment = false;
-    private Boolean oenJavadocComment = false;
+    private Boolean openJavadocComment = false;
     private Boolean afterSingleLineComment = false;
     private Boolean previousCharacterIsEscape = false;
-    private List<int[]> charactersToRemove;
-    private List<Integer> linesToReplace;
+    private List<int[]> charactersToRemove = new ArrayList<>();  // Three values, line number, opening quote, closing quote
+    private List<Integer> linesToReplace = new ArrayList<>();    // Replace the entire line for comments?
 
 
     //******************************************************************************************************
@@ -76,7 +80,7 @@ public class FileInformation {
         javadocCommentOpen = false;
         multiLineCommentOpen = false;
 
-        List<String> fileContents = fileParser.getFileContents();
+        fileContents = fileParser.getFileContents();
         generateKeywordList();
 
         System.out.println(fileContents.size());
@@ -85,12 +89,15 @@ public class FileInformation {
         }
         System.out.println("Class Opening:  " + openingClassLine + ". Class closing: " + closingClassLine);
         findFunctionBounds();
+        replaceQuotedText();
         printFunctionBounds();
+        printTextToRemove();
     }
 
     private void runInfoGatherers(int lineNumber, String lineText) {
         checkJavadocComment(lineNumber, lineText);
         findClassBounds(lineNumber, lineText);
+        removeQuotedAndCommentedText(lineNumber, lineText);
         for (String keyword : keywords) {
             checkKeyword(lineNumber, lineText, keyword);
         }
@@ -205,6 +212,77 @@ public class FileInformation {
 
                 }
             }
+        }
+    }
+
+    private void removeQuotedAndCommentedText(int lineNumber, String lineText) {
+        /*
+        private Boolean openQuote = false;
+        private Boolean openMultiLineComment = false;
+        private Boolean openJavadocComment = false;
+        private Boolean afterSingleLineComment = false;
+        private Boolean previousCharacterIsEscape = false;
+        private List<int[]> charactersToRemove = new ArrayList<>();  // Three values, line number, opening quote, closing quote
+        private List<Integer> linesToReplace = new ArrayList<>();    // Replace the entire line for comments?
+        */
+        for (int index = 0; index < lineText.length(); index ++) {
+            if (openQuote) {
+                if (lineText.charAt(index) == '\"') {
+                    if (previousCharacterIsEscape) {
+                        previousCharacterIsEscape = false;
+                    } else {
+                        int[] tempArray = {lineNumber, quoteOpenIndex, index};
+                        charactersToRemove.add(tempArray);
+                        quotedTextArray.add(lineText.substring(quoteOpenIndex + 1, index));
+                        openQuote = false;
+                    }
+
+                } else if (lineText.charAt(index) == '\\') {
+                    previousCharacterIsEscape = true;
+                }
+            } else if (openJavadocComment) {
+                if (index == lineText.length() - 1) {
+
+                }
+            } else {
+                if (lineText.charAt(index) == '\"') {
+                    openQuote = true;
+                    quoteOpenIndex = index;
+                }
+            }
+        }
+    }
+    private void replaceQuotedText() {
+        for(int index = 0; index < charactersToRemove.size(); index ++) {
+            int[] tmpArray = charactersToRemove.get(index);
+            String replacement = buildDots(tmpArray[1], tmpArray[2]);
+
+            String lineText = fileContents.get(tmpArray[0] - 1);
+            String newText = lineText.substring(0, tmpArray[1]) + replacement + lineText.substring(tmpArray[2] + 1);
+
+            fileContents.set(tmpArray[0] - 1, newText);
+
+            System.out.println(newText);
+        }
+    }
+
+    private String buildDots(int startIndex, int endIndex) {
+        String dots = "";
+        for (int i = 0; i < (endIndex - startIndex); i ++) {
+            dots += ".";
+        }
+
+        return dots;
+    }
+
+    private void printTextToRemove() {
+        for (int i = 0; i < charactersToRemove.size(); i++) {
+            int[] tmp = charactersToRemove.get(i);
+            System.out.println("Found quote on line " + tmp[0] + ". Between index " + tmp[1] + " and " + tmp[2]);
+        }
+        for (int i = 0; i < quotedTextArray.size(); i++) {
+
+            System.out.println("Quoted Text To Remove: " + quotedTextArray.get(i));
         }
     }
 
