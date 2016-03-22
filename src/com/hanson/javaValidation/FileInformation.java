@@ -144,6 +144,8 @@ public class FileInformation {
         }
     }
 
+    //********************Probably new classes*************************************
+    //*****************************************************************************
     public void findClassBounds(int lineNumber, String lineText) {
         if (!foundClassBounds) {
             if (foundOpeningClassLine) {
@@ -154,13 +156,7 @@ public class FileInformation {
                         openBrackets --;
                     }
                 }
-                /*  Code does not account for multiple brackets on one line
-                if (lineText.contains("{")) {
-                    openBrackets++;
-                } else if (lineText.contains("}")) {
-                    openBrackets--;
-                }
-                */
+
                 if (openBrackets == 0) {
                     closingClassLine = lineNumber;
                     foundClassBounds = true;
@@ -241,6 +237,8 @@ public class FileInformation {
         }
 
     }
+    //************************************************************************
+
 
     private void generateKeywordList() {
         for (Keyword key : Keyword.values()) {
