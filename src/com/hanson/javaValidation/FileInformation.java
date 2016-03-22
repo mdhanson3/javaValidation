@@ -231,7 +231,7 @@ public class FileInformation {
                     if (previousCharacterIsEscape) {
                         previousCharacterIsEscape = false;
                     } else {
-                        int[] tempArray = {lineNumber, quoteOpenIndex, index};
+                        int[] tempArray = {lineNumber, quoteOpenIndex, lineNumber, index};
                         charactersToRemove.add(tempArray);
                         quotedTextArray.add(lineText.substring(quoteOpenIndex + 1, index));
                         openQuote = false;
@@ -255,10 +255,10 @@ public class FileInformation {
     private void replaceQuotedText() {
         for(int index = 0; index < charactersToRemove.size(); index ++) {
             int[] tmpArray = charactersToRemove.get(index);
-            String replacement = buildDots(tmpArray[1], tmpArray[2]);
+            String replacement = buildDots(tmpArray[1], tmpArray[3]);
 
             String lineText = fileContents.get(tmpArray[0] - 1);
-            String newText = lineText.substring(0, tmpArray[1]) + replacement + lineText.substring(tmpArray[2] + 1);
+            String newText = lineText.substring(0, tmpArray[1]) + replacement + lineText.substring(tmpArray[3] + 1);
 
             fileContents.set(tmpArray[0] - 1, newText);
 
@@ -278,7 +278,7 @@ public class FileInformation {
     private void printTextToRemove() {
         for (int i = 0; i < charactersToRemove.size(); i++) {
             int[] tmp = charactersToRemove.get(i);
-            System.out.println("Found quote on line " + tmp[0] + ". Between index " + tmp[1] + " and " + tmp[2]);
+            System.out.println("Found quote on line " + tmp[0] + ". Between index " + tmp[1] + " and " + tmp[3]);
         }
         for (int i = 0; i < quotedTextArray.size(); i++) {
 
