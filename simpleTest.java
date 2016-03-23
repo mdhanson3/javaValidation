@@ -16,3 +16,5 @@ here is some code  // Here is some text after a single line comment
 /**/
 
 /**//**/
+
+/*  */// test

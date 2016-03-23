@@ -316,7 +316,8 @@ public class FileInformation {
                             multiLineOpenLine = lineNumber;
                             index += 1;
                         } else if (lineText.charAt(index + 1) == '/') {
-                            System.out.println("FOUND SINGLE LINE COMMENT");
+                            System.out.println("FOUND SINGLE ON LINE: " + lineNumber);
+                            System.out.println("Line Number: " + lineNumber + " start Index: " + (index + 2) + " Line Number: " + lineNumber + ". Line Length: " + (lineText.length() - 1));
                             int[] tempArray = {lineNumber, index + 2, lineNumber, lineText.length() - 1};
                             charactersToRemove.add(tempArray);
                             return;
@@ -326,13 +327,13 @@ public class FileInformation {
                     // Check only for multi-line comment if there is only one character following the /
                     else if (index < lineText.length() - 1) {
                         if (lineText.charAt(index + 1) == '*') {
-                            System.out.println("FOUND MULTI-LINE COMMENT ONE LINE: " + index);
+                            System.out.println("FOUND MULTI-LINE COMMENT ON LINE: " + lineNumber);
                             openMultiLineComment = true;
                             multiLineOpenCommentIndex = index + 1;
                             multiLineOpenLine = lineNumber;
                             index += 1;
                         } else if (lineText.charAt(index + 1) == '/') {
-                            System.out.println("FOUND SINGLE LINE COMMENT");
+                            System.out.println("FOUND SINGLE LINE COMMENT ON LINE: " + lineNumber);
                             int[] tempArray = {lineNumber, index, lineNumber, lineText.length() - 1};
                             charactersToRemove.add(tempArray);
                             return;
@@ -351,14 +352,17 @@ public class FileInformation {
 
             // If the text to replace spans only one line, use this simple code.  Else, remove text from each line.
             if (tmpArray[0] == tmpArray[2]) {
-                String replacement = buildDots(tmpArray[1], tmpArray[3]);
+                if (tmpArray[1] >= tmpArray[3]) {
+                    String replacement = buildDots(tmpArray[1], tmpArray[3]);
 
-                String lineText = fileContents.get(tmpArray[0] - 1);
-                String newText = lineText.substring(0, tmpArray[1]) + replacement + lineText.substring(tmpArray[3] + 1);
+                    String lineText = fileContents.get(tmpArray[0] - 1);
+                    String newText = lineText.substring(0, tmpArray[1]) + replacement + lineText.substring(tmpArray[3] + 1);
 
-                fileContents.set(tmpArray[0] - 1, newText);
+                    fileContents.set(tmpArray[0] - 1, newText);
 
-                System.out.println(newText);
+                    System.out.println(newText);
+                }
+
             } else {
 
                 // Replace all text between the first line number first index and second line number second index
