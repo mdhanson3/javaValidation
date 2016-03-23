@@ -44,4 +44,19 @@ public class ErrorFileWriter {
             exception.printStackTrace();
         }
     }
+
+    public void writeFileFromArray(List<String> output) {
+        try(BufferedWriter out = new BufferedWriter(new java.io.FileWriter("output/cleanJavaCode.html"))) {
+           for(String outputLine : output) {
+               out.write(outputLine);
+               out.newLine();
+           }
+        } catch (IOException ioException) {
+            System.out.println("Error writing the markup file");
+            ioException.printStackTrace();
+        } catch (Exception exception) {
+            System.out.println("Error writing the cleansed file");
+            exception.printStackTrace();
+        }
+    }
 }
