@@ -61,7 +61,7 @@ public class someClass {
         mySingleLineValidator.outputErrors();
         /** bunch of stuff */
 
-        ErrorFileWriter myWriter = new ErrorFileWriter();  //this does something "and something quoted" /* */ //
+        ErrorFileWriter myWriter = new ErrorFileWriter();  //this does something "and something quoted" /*    */ //
         myWriter.writeMarkupFile(arguments[0]);
         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
     }
