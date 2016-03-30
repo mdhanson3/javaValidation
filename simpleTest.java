@@ -38,7 +38,7 @@ Code followed by single line comment //Hello
         /*            */  //test
 /**//**/  //test
 
-
+/***/
 /* *//* */  //test
 
 /*  */ l       // test

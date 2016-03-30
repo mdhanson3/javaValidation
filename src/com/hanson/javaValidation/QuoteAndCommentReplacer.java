@@ -44,9 +44,9 @@ public class QuoteAndCommentReplacer {
             if (openQuote) {
                 checkForClosingQuote(lineNumber, lineText, index);
             } else if (openJavadocComment) {
-                checkForClosingJavadoc(lineNumber, lineText, index);
+                index = checkForClosingJavadoc(lineNumber, lineText, index);
             } else if (openMultiLineComment) {
-                checkForClosingMultiLine(lineNumber, lineText, index);
+                index = checkForClosingMultiLine(lineNumber, lineText, index);
             } else {
 
                 // Set index and booleans if quote found
@@ -99,7 +99,7 @@ public class QuoteAndCommentReplacer {
         }
     }
 
-    private void checkForClosingMultiLine(int lineNumber, String lineText, int index) {
+    private int checkForClosingMultiLine(int lineNumber, String lineText, int index) {
         // Check for first character of closing comment
         if (lineText.charAt(index) == '*' && (index < lineText.length() - 1)) {
             // If first character is found, check it isn't the last character in the string, and that the next
@@ -112,9 +112,10 @@ public class QuoteAndCommentReplacer {
                 index ++;
             }
         }
+        return index;
     }
 
-    private void checkForClosingJavadoc(int lineNumber, String lineText, int index) {
+    private int checkForClosingJavadoc(int lineNumber, String lineText, int index) {
         // Check for first character of closing comment
         if (lineText.charAt(index) == '*' && (index < lineText.length() - 1)) {
             // If first character is found, check it isn't the last character in the string, and that the next
@@ -128,6 +129,7 @@ public class QuoteAndCommentReplacer {
                 index ++;
             }
         }
+        return index;
     }
 
     /**

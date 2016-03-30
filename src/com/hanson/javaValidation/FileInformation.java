@@ -44,24 +44,10 @@ public class FileInformation {
     //******************************************************************************************************
     //******************************************************************************************************
 
-    //******************************************************************************************************/
-    // These variables are for stripping comment and quoted text.  Should be refactored into its own class most likely.
-    //******************************************************************************************************
-    private boolean openQuote = false;
-    private int quoteOpenIndex;
-    private int multiLineOpenCommentIndex;
-    private int multiLineOpenLine;
 
-    private boolean openMultiLineComment = false;
-    private boolean openJavadocComment = false;
-    private boolean afterSingleLineComment = false;  // Needed for removing comments after // - this broke somehow
-    private boolean previousCharacterIsEscape = false;
 
     private List<int[]> charactersToRemove = new ArrayList<>();  // Four values, opening line number, opening quote, ending line number, closing quote/
-    //private List<String> quotedTextArray = new ArrayList<>();  // Used for printing
 
-    //******************************************************************************************************
-    //******************************************************************************************************
 
 
     FileInformation(FileParser parser) {
