@@ -38,10 +38,14 @@ Code followed by single line comment //Hello
         /*            */  //test
 /**//**/  //test
 
+
+/* *//* */  //test
+
 /*  */ l       // test
 
 more text
 
+line ends with a single line comment //
 
 /**
  *

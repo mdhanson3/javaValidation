@@ -13,11 +13,9 @@ public class QuoteAndCommentReplacer {
     private boolean openQuote = false;
     private boolean openMultiLineComment = false;
     private boolean openJavadocComment = false;
-    //private boolean afterSingleLineComment = false;  // Needed for removing comments after // - this broke somehow
     private boolean previousCharacterIsEscape = false;
     private List<int[]> charactersToRemove = new ArrayList<>();  //
     private List<String> fileContents;  // Contents of file to find and replace text
-    //private List<String> modifiedFileContents;
 
     QuoteAndCommentReplacer(List<String> contents) {
         fileContents = contents;
@@ -95,14 +93,6 @@ public class QuoteAndCommentReplacer {
                             multiLineOpenLine = lineNumber;
                             index += 1;
                         }
-                        /*
-                        else if (lineText.charAt(index + 1) == '/') {
-                            System.out.println("FOUND SINGLE LINE COMMENT ON LINE: " + lineNumber);
-                            int[] tempArray = {lineNumber, index, lineNumber, lineText.length()};
-                            charactersToRemove.add(tempArray);
-                            return;
-                        }
-                        */
                     }
                 }
             }
