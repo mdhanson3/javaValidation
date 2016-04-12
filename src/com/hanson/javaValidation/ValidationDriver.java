@@ -1,8 +1,9 @@
 package com.hanson.javaValidation;
 
 /**
+ * Entry point (main method) for the Java Validation program.
  *
- * Created by student on 2/9/16.
+ * Created on 2/9/16.
  * @author Mitchell Hanson
  */
 public class ValidationDriver {

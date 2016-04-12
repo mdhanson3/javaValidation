@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * Created by student on 3/30/16.
+ * @author Mitchell Hanson
  */
 public class QuoteAndCommentReplacer {
     private int quoteOpenIndex;
@@ -14,20 +15,24 @@ public class QuoteAndCommentReplacer {
     private boolean openMultiLineComment = false;
     private boolean openJavadocComment = false;
     private boolean previousCharacterIsEscape = false;
-    private List<int[]> charactersToRemove = new ArrayList<>();  //
+    private List<SectionToRemove> sectionsToRemove = new ArrayList<>(); //List of sections to remove.
     private List<String> fileContents;  // Contents of file to find and replace text
+    private List<String> originalFileContents;
 
     QuoteAndCommentReplacer(List<String> contents) {
         fileContents = contents;
         //TODO: Initialize objects here (remove initialization from above)
     }
 
-    public List getTransformedText() {
+    public List<String> getFileContents(){
+        return fileContents;
+    }
+    public void replaceQuotesAndComments() {
 
         findTextToRemoveBounds();
         replaceQuotedText();
 
-        return fileContents;
+
     }
 
     private void findTextToRemoveBounds() {
@@ -78,8 +83,10 @@ public class QuoteAndCommentReplacer {
                         } else if (lineText.charAt(index + 1) == '/') {
                             System.out.println("FOUND SINGLE ON LINE: " + lineNumber);
                             System.out.println("Line Number: " + lineNumber + " start Index: " + (index + 2) + " Line Number: " + lineNumber + ". Line Length: " + (lineText.length() - 1));
-                            int[] tempArray = {lineNumber, index + 1, lineNumber, lineText.length()};
-                            charactersToRemove.add(tempArray);
+
+                            SectionToRemove tmpSectionToRemove = new SectionToRemove(lineNumber, index + 1, lineNumber, lineText.length());
+                            sectionsToRemove.add(tmpSectionToRemove);
+
                             return;
                         }
                     }
@@ -106,8 +113,10 @@ public class QuoteAndCommentReplacer {
             // character is the second character of the closing comment
             if (lineText.charAt(index + 1) == '/') {
                 System.out.println("Found closing multi-line comment");
-                int[] tempArray = {multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index};
-                charactersToRemove.add(tempArray);
+
+                SectionToRemove tmpSectionToRemove = new SectionToRemove(multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index);
+                sectionsToRemove.add(tmpSectionToRemove);
+
                 openMultiLineComment = false;
                 index ++;
             }
@@ -123,8 +132,10 @@ public class QuoteAndCommentReplacer {
             if (lineText.charAt(index + 1) == '/') {
                 System.out.println("FOUND CLOSE JAVADOC - Opening line: " + multiLineOpenLine + ". Closing line: " + lineNumber + "OpeningIndex "
                         + multiLineOpenCommentIndex + ". Closing index: " + index);
-                int[] tempArray = {multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index};
-                charactersToRemove.add(tempArray);
+
+                SectionToRemove tmpSectionToRemove = new SectionToRemove(multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index);
+                sectionsToRemove.add(tmpSectionToRemove);
+
                 openJavadocComment = false;
                 index ++;
             }
@@ -141,8 +152,9 @@ public class QuoteAndCommentReplacer {
             if (previousCharacterIsEscape) {
                 previousCharacterIsEscape = false;
             } else {
-                int[] tempArray = {lineNumber, quoteOpenIndex, lineNumber, index};
-                charactersToRemove.add(tempArray);
+                SectionToRemove tmpSectionToRemove = new SectionToRemove(lineNumber, quoteOpenIndex, lineNumber, index);
+                sectionsToRemove.add(tmpSectionToRemove);
+
                 // TODO: Remove this line for when debug complete
                 //quotedTextArray.add(lineText.substring(quoteOpenIndex + 1, index));
                 openQuote = false;
@@ -154,23 +166,28 @@ public class QuoteAndCommentReplacer {
     }
 
     private void replaceQuotedText() {
-        for(int index = 0; index < charactersToRemove.size(); index ++) {
+        for(int index = 0; index < sectionsToRemove.size(); index ++) {
 
-            int[] tmpArray = charactersToRemove.get(index);
+            SectionToRemove tmpSection = sectionsToRemove.get(index);
+
+            int openingLine = tmpSection.getOpeningLine();
+            int openingIndex = tmpSection.getOpeningIndex();
+            int closingLine = tmpSection.getClosingLine();
+            int closingIndex = tmpSection.getClosingIndex();
 
 
             // If the text to replace spans only one line, use this simple code.  Else, remove text from each line.
-            if (tmpArray[0] == tmpArray[2]) {
-                if (tmpArray[1] == tmpArray[3] + 1) {
+            if (openingLine == closingLine) {
+                if (openingIndex == closingIndex + 1) {
 
                 }
-                else if (tmpArray[1] < tmpArray[3]) {
+                else if (openingIndex < closingIndex) {
 
-                    String lineText = fileContents.get(tmpArray[0] - 1);
-                    String replacement = buildDots(tmpArray[1], tmpArray[3] - 1);
+                    String lineText = fileContents.get(openingLine - 1);
+                    String replacement = buildDots(openingIndex, closingIndex - 1);
                     String newText;
-                    int startIndex = tmpArray[1] + 1;
-                    int endIndex = tmpArray[3];
+                    int startIndex = openingIndex + 1;
+                    int endIndex = closingIndex;
 
                     if (endIndex >= lineText.length() - 1) {
                         newText = lineText.substring(0, startIndex ) + replacement;
@@ -178,27 +195,26 @@ public class QuoteAndCommentReplacer {
                         newText = lineText.substring(0, startIndex) + replacement + lineText.substring(endIndex, lineText.length());
                     }
 
-                    fileContents.set(tmpArray[0] - 1, newText);
+                    fileContents.set(openingLine - 1, newText);
                 }
 
             } else {
-                int startIndex = tmpArray[1] + 1;
-                int endIndex = tmpArray[3];
+                int startIndex = openingIndex + 1;
 
                 // Replace all text between the first line number first index and second line number second index
-                for (int currentLineNumber = tmpArray[0]; currentLineNumber <= tmpArray[2]; currentLineNumber ++) {
+                for (int currentLineNumber = openingLine; currentLineNumber <= closingLine; currentLineNumber ++) {
 
                     // If this is the last line of text to replace, replace from index 0 to the closing index of the comment
-                    if (currentLineNumber == tmpArray[2]) {
-                        if (endIndex < 1) {
+                    if (currentLineNumber == closingLine) {
+                        if (closingIndex < 1) {
 
                         } else {
-                            String replacement = buildDots(0, endIndex);
+                            String replacement = buildDots(0, closingIndex);
                             String lineText = fileContents.get(currentLineNumber - 1);
 
-                            String newText = replacement + lineText.substring(endIndex );
+                            String newText = replacement + lineText.substring(closingIndex);
 
-                            fileContents.set(tmpArray[2] - 1, newText);
+                            fileContents.set(closingLine - 1, newText);
 
                             System.out.println("Line Number: " + currentLineNumber + ". New text: " + newText);
                         }
@@ -206,13 +222,13 @@ public class QuoteAndCommentReplacer {
                     }
 
                     // If this is the first line of text to replace, replace from the opening index to the end of the string
-                    else if (currentLineNumber == tmpArray[0]) {
+                    else if (currentLineNumber == openingLine) {
                         String lineText = fileContents.get(currentLineNumber - 1);
                         String replacement = buildDots(startIndex, lineText.length() - 1);
 
                         String newText = lineText.substring(0, startIndex) + replacement;
 
-                        fileContents.set(tmpArray[0] -1, newText);
+                        fileContents.set(openingLine -1, newText);
                         System.out.println("Line Number: " + currentLineNumber + ". New text: " + newText);
                     }
 
@@ -227,8 +243,6 @@ public class QuoteAndCommentReplacer {
                     }
                 }
             }
-
-
         }
     }
 
@@ -237,7 +251,6 @@ public class QuoteAndCommentReplacer {
         for (int i = 0; i < (endIndex - startIndex); i ++) {
             dots += ".";
         }
-
         return dots;
     }
 }

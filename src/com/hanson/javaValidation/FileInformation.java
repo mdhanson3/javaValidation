@@ -11,16 +11,17 @@ import java.util.*;
  * Created by student on 3/1/16.
  */
 public class FileInformation {
-    private final int JAVADOC_CODE = -1;
-    private final int MULTI_LINE_COMMENT_CODE = 0;
-    private List<String> keywords;
-    //private final keywordDecode keywordDecoder = new keywordDecode();
-    private FileParser fileParser;
     private QuoteAndCommentReplacer quoteAndTextReplacer;
-    private List<int[]> lineInformation;
-    //private List<Integer> javadocComments;
+    private List<String> keywords;
+    private FileParser fileParser;
 
+    private List<int[]> lineInformation;
     private List<String> fileContents;
+
+    // private final int JAVADOC_CODE = -1;
+    // private final int MULTI_LINE_COMMENT_CODE = 0;
+    //private final keywordDecode keywordDecoder = new keywordDecode();
+    //private List<Integer> javadocComments;
 
     //private boolean previousLineJavadocComment = false;
     //private boolean javadocCommentOpen = false;
@@ -67,11 +68,8 @@ public class FileInformation {
      * Stores information about the file in a list.
      */
     public void runFileInformation() {
-        //previousLineJavadocComment = false;
-        //javadocCommentOpen = false;
-        //multiLineCommentOpen = false;
-
-        fileContents = quoteAndTextReplacer.getTransformedText();
+        quoteAndTextReplacer.replaceQuotesAndComments();
+        fileContents = quoteAndTextReplacer.getFileContents();
 
         generateKeywordList();
 
@@ -95,47 +93,6 @@ public class FileInformation {
         }
     }
 
-    /*
-        TODO:  Remove this function.
-        This function doesn't needs to exist.  Another function is removing the text within javadocs.  If recording the
-        bounds is needed, that function can handle that as well.
-     */
-    /*
-    private void checkJavadocComment(int lineNumber, String lineText) {
-        if (javadocCommentOpen) {
-        */
-            //if (lineText.contains("*/")) {
-    /*
-                javadocCommentOpen = false;
-            }
-            addLineInformation(lineNumber, JAVADOC_CODE);
-        }
-        else if (lineText.contains("/**")) {
-            javadocCommentOpen = true;
-            addLineInformation(lineNumber, JAVADOC_CODE);
-        }
-
-        else {
-            checkMultiLineComment(lineNumber, lineText);
-        }
-    }
-    */
-    /*
-    private void checkMultiLineComment(int lineNumber, String lineText) {
-        if (multiLineCommentOpen) {
-    */
-            //if (lineText.contains("*/")) {
-    /*
-                multiLineCommentOpen = false;
-            }
-            addLineInformation(lineNumber, MULTI_LINE_COMMENT_CODE);
-        }
-        else if (lineText.contains("/*")) {
-            multiLineCommentOpen = true;
-            addLineInformation(lineNumber, MULTI_LINE_COMMENT_CODE);
-        }
-    }
-    */
     private void checkKeyword(int lineNumber, String lineText, String keyword) {
         if (lineText.contains(keyword)) {
             System.out.println("found code: " + keywordDecode.decodeKeyword(keyword) + ". On line " + lineNumber + ".  Keyword: " + keyword);
