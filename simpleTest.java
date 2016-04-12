@@ -27,7 +27,12 @@ Code followed by single line comment //Hello
         Second multi-line comment
 
      */
+class {
 
+        function() {
+
+        }
+}
 here is some code
 
 Code followed by single line comment //Hello
