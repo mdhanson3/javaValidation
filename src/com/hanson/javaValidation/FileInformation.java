@@ -12,6 +12,7 @@ import java.util.*;
  */
 public class FileInformation {
     private QuoteAndCommentReplacer quoteAndTextReplacer;
+    private ClassAndFunctionBoundsFinder classAndFunctionBoundsFinder;
     private List<String> keywords;
     private FileParser fileParser;
 
@@ -57,6 +58,7 @@ public class FileInformation {
         keywords = new ArrayList<>();
         fileParser = parser;
         quoteAndTextReplacer = new QuoteAndCommentReplacer(parser.getFileContents());
+        classAndFunctionBoundsFinder = new ClassAndFunctionBoundsFinder(parser.getFileContents());
     }
 
     public List getLineINformation() {
