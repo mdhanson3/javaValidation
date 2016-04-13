@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by student on 4/12/16.
+ * This class iterates over a list of strings representing the contents of a java file searching for the bounds of the
+ * class and functions found within.  The class bounds are stored as a FunctionBounds object.  For each function found
+ * a FunctionBounds object is created and added to a List of FunctionBounds.
+ *
+ * Created on 4/12/16.
+ * @author Mitchell Hanson
  */
 public class ClassAndFunctionBoundsFinder {
     private List<FunctionBounds> functionBoundsList;

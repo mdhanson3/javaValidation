@@ -82,7 +82,6 @@ public class QuoteAndCommentReplacer {
 
                         // If followed by two * then it's a javadoc
                         if (lineText.charAt(index + 1) == '*' && lineText.charAt(index + 2) == '*') {
-                            System.out.println("FOUND JAVADOC COMMENT ONE LINE: " + lineNumber);
                             openJavadocComment = true;
                             multiLineOpenCommentIndex = index + 2;
                             multiLineOpenLine = lineNumber;
@@ -91,18 +90,13 @@ public class QuoteAndCommentReplacer {
 
                         // If followed by one * then it's a multi-line comment
                         else if (lineText.charAt(index + 1) == '*') {
-                            System.out.println("FOUND MULTI-LINE COMMENT ONE LINE: " + index);
                             openMultiLineComment = true;
                             multiLineOpenCommentIndex = index + 1;
                             multiLineOpenLine = lineNumber;
                             index += 1;
                         } else if (lineText.charAt(index + 1) == '/') {
-                            System.out.println("FOUND SINGLE ON LINE: " + lineNumber);
-                            System.out.println("Line Number: " + lineNumber + " start Index: " + (index + 2) + " Line Number: " + lineNumber + ". Line Length: " + (lineText.length() - 1));
-
                             SectionToRemove tmpSectionToRemove = new SectionToRemove(lineNumber, index + 1, lineNumber, lineText.length());
                             sectionsToRemove.add(tmpSectionToRemove);
-
                             return;
                         }
                     }
@@ -110,7 +104,6 @@ public class QuoteAndCommentReplacer {
                     // Check only for multi-line comment if there is only one character following the /
                     else if (index < lineText.length() - 1) {
                         if (lineText.charAt(index + 1) == '*') {
-                            System.out.println("FOUND MULTI-LINE COMMENT ON LINE: " + lineNumber);
                             openMultiLineComment = true;
                             multiLineOpenCommentIndex = index + 1;
                             multiLineOpenLine = lineNumber;
@@ -136,14 +129,12 @@ public class QuoteAndCommentReplacer {
     private int checkForClosingMultiLine(int lineNumber, String lineText, int index) {
         // Check for first character of closing comment
         if (lineText.charAt(index) == '*' && (index < lineText.length() - 1)) {
+
             // If first character is found, check it isn't the last character in the string, and that the next
             // character is the second character of the closing comment
             if (lineText.charAt(index + 1) == '/') {
-                System.out.println("Found closing multi-line comment");
-
                 SectionToRemove tmpSectionToRemove = new SectionToRemove(multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index);
                 sectionsToRemove.add(tmpSectionToRemove);
-
                 openMultiLineComment = false;
                 index ++;
             }
@@ -168,8 +159,6 @@ public class QuoteAndCommentReplacer {
             // If first character is found, check it isn't the last character in the string, and that the next
             // character is the second character of the closing comment
             if (lineText.charAt(index + 1) == '/') {
-                System.out.println("FOUND CLOSE JAVADOC - Opening line: " + multiLineOpenLine + ". Closing line: " + lineNumber + "OpeningIndex "
-                        + multiLineOpenCommentIndex + ". Closing index: " + index);
 
                 SectionToRemove tmpSectionToRemove = new SectionToRemove(multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index);
                 sectionsToRemove.add(tmpSectionToRemove);
@@ -203,6 +192,11 @@ public class QuoteAndCommentReplacer {
         }
     }
 
+    /**
+     * This function iterates over the sectionsToRemove List and uses the bounds information of each SectionToRemove object
+     * to replace the text within the fileContents list.
+     *
+     */
     private void replaceQuotedText() {
         for(int index = 0; index < sectionsToRemove.size(); index ++) {
 
@@ -253,8 +247,6 @@ public class QuoteAndCommentReplacer {
                             String newText = replacement + lineText.substring(closingIndex);
 
                             fileContents.set(closingLine - 1, newText);
-
-                            System.out.println("Line Number: " + currentLineNumber + ". New text: " + newText);
                         }
 
                     }
@@ -267,7 +259,6 @@ public class QuoteAndCommentReplacer {
                         String newText = lineText.substring(0, startIndex) + replacement;
 
                         fileContents.set(openingLine -1, newText);
-                        System.out.println("Line Number: " + currentLineNumber + ". New text: " + newText);
                     }
 
                     // This is a middle line that should entirely be replaced because it is entirely encompassed by
@@ -277,7 +268,6 @@ public class QuoteAndCommentReplacer {
                         String replacement = buildDots(0, lineText.length() - 1);
 
                         fileContents.set(currentLineNumber - 1, replacement);
-                        System.out.println("Line Number: " + currentLineNumber + ". New text: " + replacement);
                     }
                 }
             }

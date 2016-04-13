@@ -13,49 +13,48 @@ import java.util.*;
 public class FileInformation {
     private QuoteAndCommentReplacer quoteAndTextReplacer;
     private ClassAndFunctionBoundsFinder classAndFunctionBoundsFinder;
+
     private List<String> keywords;
     private FileParser fileParser;
 
     private List<int[]> lineInformation;
     private List<String> fileContents;
-
-    // private final int JAVADOC_CODE = -1;
-    // private final int MULTI_LINE_COMMENT_CODE = 0;
-    //private final keywordDecode keywordDecoder = new keywordDecode();
-    //private List<Integer> javadocComments;
-
-    //private boolean previousLineJavadocComment = false;
-    //private boolean javadocCommentOpen = false;
-    //private boolean multiLineCommentOpen = false;
-
+    private List<String> sanitizedFileContents;
 
     FileInformation(FileParser parser) {
         lineInformation = new ArrayList<>();
-        //javadocComments = new ArrayList<>();
         keywords = new ArrayList<>();
+
+        //**********************************************************************************************
+        // TODO: Figure out pass by reference issues, how to maintain original file contents?
+        sanitizedFileContents = new ArrayList<>();
+        fileContents = parser.getFileContents();
         fileParser = parser;
-        quoteAndTextReplacer = new QuoteAndCommentReplacer(parser.getFileContents());
+        quoteAndTextReplacer = new QuoteAndCommentReplacer(fileParser.getFileContents());
+        //**********************************************************************************************
+
         classAndFunctionBoundsFinder = new ClassAndFunctionBoundsFinder();
     }
 
     public List getLineINformation() {
         return lineInformation;
     }
-    public List getFileContents() {return fileContents;};
+    public List<String> getFileContents() {return sanitizedFileContents;};
+    public List<String> getOriginalFileContents() {return fileContents;};
 
     /**
      * Stores information about the file in a list.
      */
     public void runFileInformation() {
         quoteAndTextReplacer.replaceQuotesAndComments();
-        fileContents = quoteAndTextReplacer.getFileContents();
-        classAndFunctionBoundsFinder.findClassAndFunctionBounds(fileContents);
+        sanitizedFileContents = quoteAndTextReplacer.getFileContents();
+        classAndFunctionBoundsFinder.findClassAndFunctionBounds(sanitizedFileContents);
 
         generateKeywordList();
 
-        System.out.println(fileContents.size());
-        for (int index = 0; index < fileContents.size(); index ++) {
-            runInfoGatherers(index + 1, fileContents.get(index));
+        System.out.println(sanitizedFileContents.size());
+        for (int index = 0; index < sanitizedFileContents.size(); index ++) {
+            runInfoGatherers(index + 1, sanitizedFileContents.get(index));
         }
     }
 
@@ -83,11 +82,6 @@ public class FileInformation {
         }
     }
 
-    //********************Probably new classes*************************************
-    //*****************************************************************************
-
-
-
     // Enum of keywords to search for
     private enum Keyword {
         FOR(" for"),
@@ -102,7 +96,7 @@ public class FileInformation {
 
         private String value;
 
-        private Keyword(String value) {
+        Keyword(String value) {
             this.value = value;
         }
 
@@ -111,8 +105,6 @@ public class FileInformation {
         }
 
     }
-    //************************************************************************
-
 
     private void generateKeywordList() {
         for (Keyword key : Keyword.values()) {

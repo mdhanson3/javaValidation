@@ -57,8 +57,14 @@ public class FileValidator {
 
         ErrorFileWriter myWriter = new ErrorFileWriter();
         myWriter.writeMarkupFile(fileName);
-        myWriter.writeFileFromArray(myFileInformation.getFileContents());
+        myWriter.writeFileFromArray(myFileInformation.getFileContents(), "cleanJavaCode.html");
+        myWriter.writeFileFromArray(myFileInformation.getOriginalFileContents(), "originalJavaCode.html");
         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
+        List<String> originalFile = myFileInformation.getOriginalFileContents();
+
+        for(String line : originalFile) {
+            System.out.println(line);
+        }
 
         if (DEBUG) {
             myFileInformation.debugTerminalOutput();

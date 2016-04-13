@@ -45,8 +45,9 @@ public class ErrorFileWriter {
         }
     }
 
-    public void writeFileFromArray(List<String> output) {
-        try(BufferedWriter out = new BufferedWriter(new java.io.FileWriter("output/cleanJavaCode.html"))) {
+    public void writeFileFromArray(List<String> output, String fileName) {
+
+        try(BufferedWriter out = new BufferedWriter(new java.io.FileWriter("output/" + fileName))) {
            for(String outputLine : output) {
                out.write(outputLine);
                out.newLine();

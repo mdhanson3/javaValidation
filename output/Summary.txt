@@ -1,3 +1,0 @@
-This is the summary
-line count = 17
-javadoc Errors

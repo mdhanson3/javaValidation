@@ -32,6 +32,12 @@ class {
         function() {
 
         }
+
+        secondFunction() {
+            for(bs and some other bs) {
+
+        }
+        }
 }
 here is some code
 
