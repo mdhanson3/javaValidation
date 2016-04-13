@@ -41,6 +41,7 @@ public class FileValidator {
 
 
         // Create fileInformation object and run its main method
+        //TODO: Change to pass in list<string> instead of parser object
         FileInformation myFileInformation = new FileInformation(myFileParser);
         myFileInformation.runFileInformation();
 
@@ -57,14 +58,12 @@ public class FileValidator {
 
         ErrorFileWriter myWriter = new ErrorFileWriter();
         myWriter.writeMarkupFile(fileName);
+        //TODO: The output below doesn't work because of pass by reference issues
         myWriter.writeFileFromArray(myFileInformation.getFileContents(), "cleanJavaCode.html");
         myWriter.writeFileFromArray(myFileInformation.getOriginalFileContents(), "originalJavaCode.html");
         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
         List<String> originalFile = myFileInformation.getOriginalFileContents();
-
-        for(String line : originalFile) {
-            System.out.println(line);
-        }
+        
 
         if (DEBUG) {
             myFileInformation.debugTerminalOutput();
