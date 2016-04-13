@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by student on 3/30/16.
+ * This class 'sanitizes' a list of strings that represents the contents of a java file.  It finds the bounds of all
+ * quotes, single-line comments, multi-line comments, and javadoc comments then replaces all content within with dots (.).
+ * This allows the rest of the validation program run without worrying about whether or not the sentinel characters are
+ * actually in a quote or comment.  For example: if the keyword 'for' was in a comment it could break the validator that
+ * checks keyword spacing (a false positive would be recorded).
+ *
+ * Created on 3/30/16.
  * @author Mitchell Hanson
  */
 public class QuoteAndCommentReplacer {
@@ -17,7 +23,7 @@ public class QuoteAndCommentReplacer {
     private boolean previousCharacterIsEscape = false;
     private List<SectionToRemove> sectionsToRemove = new ArrayList<>(); //List of sections to remove.
     private List<String> fileContents;  // Contents of file to find and replace text
-    private List<String> originalFileContents;
+    //private List<String> originalFileContents;
 
     QuoteAndCommentReplacer(List<String> contents) {
         fileContents = contents;
@@ -42,10 +48,20 @@ public class QuoteAndCommentReplacer {
         }
     }
 
+    /**
+     * This function iterates over each character in the lineText argument and records the bounds of quotations,
+     * single-line comments, multi-line comments, and javadoc comments.  This information is later used to remove the
+     * text within each so the rest of the validator can work without worrying about quote and comment content.
+     *
+     * @param lineNumber the current line number of the file
+     * @param lineText the line of text corresponding to the line number
+     */
     private void removeQuotedAndCommentedText(int lineNumber, String lineText) {
 
+        // Iterate over every character in the string searching for quotes or comments
         for (int index = 0; index < lineText.length(); index ++) {
 
+            // If an opening quote or comment has been found previously, check the appropriate closing symbols
             if (openQuote) {
                 checkForClosingQuote(lineNumber, lineText, index);
             } else if (openJavadocComment) {
@@ -106,6 +122,17 @@ public class QuoteAndCommentReplacer {
         }
     }
 
+    /**
+     * This function checks the passed string (lineText) at the passed index (index) for the characters that
+     * symbolize the closing of a multi-line comment: a star (*) followed by a forward-slash (/).  If found, it sets
+     * the instance booleans and adds a SectionToRemove to the sectionsToRemove list. If the closing characters are found
+     * the returned index is incremented to skip over the forward-slash.
+     *
+     * @param lineNumber
+     * @param lineText
+     * @param index
+     * @return
+     */
     private int checkForClosingMultiLine(int lineNumber, String lineText, int index) {
         // Check for first character of closing comment
         if (lineText.charAt(index) == '*' && (index < lineText.length() - 1)) {
@@ -124,6 +151,17 @@ public class QuoteAndCommentReplacer {
         return index;
     }
 
+    /**
+     * This function checks the passed string (lineText) at the passed index (index) for the characters that
+     * symbolize the closing of a javadoc comment: a star (*) followed by a forward-slash (/).  If found, it sets
+     * the instance booleans and adds a SectionToRemove to the sectionsToRemove list. If the closing characters are found
+     * the returned index is incremented to skip over the forward-slash.
+     *
+     * @param lineNumber
+     * @param lineText
+     * @param index
+     * @return
+     */
     private int checkForClosingJavadoc(int lineNumber, String lineText, int index) {
         // Check for first character of closing comment
         if (lineText.charAt(index) == '*' && (index < lineText.length() - 1)) {
