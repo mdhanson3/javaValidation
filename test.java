@@ -4,7 +4,7 @@ import java.util.*
  *
  */
 
-" for",
+        " for",
         " if",
         " else",
         " else if",
@@ -19,8 +19,28 @@ import java.util.*
 public class someClass {
     private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
     private final boolean DEBUG = true;
+    private String testVar = "hello";
+    public String testVar2 = "hi";
+    some nonesense with no equals
 
     public void runValidation(String[] arguments) {
+
+        for (true) {
+
+        }
+        if (true) {
+
+        } else if (true) {
+
+        } else {
+
+        }
+        while (true) {
+
+        }
+        do while() {
+
+        }
         // Check number of args
         if (!numberOfArgumentsPassed(arguments)) {
             return;
@@ -41,6 +61,10 @@ public class someClass {
         while (true) {
             // do something
             break;
+        }
+        for (int i = 0; i < 10; i++) {
+            //<code>s</code>
+            return;
         }
 
         /*

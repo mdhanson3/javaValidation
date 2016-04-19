@@ -1,66 +1,128 @@
-/*
-
-............
-
-...*/  other text
-        /*................................*/
-
-    /*
-................................
-
-.....*/
-
-Code followed by single line comment //.....
-/*
-.......................................................................................................................
-*/
-
-  /**
-...................................................................
-.............
-...*/ text outside of end of javadoc //.....
-
-  "..........................." text outside quotes
-
-
-    /*
-................................
-
-.....*/
-class {
-
-        function() {
-
-        }
-
-        secondFunction() {
-            for(bs and some other bs) {
-
-        }
-        }
-}
-here is some code
-
-Code followed by single line comment //.....
-
-/*..............*/  //.....
-Code followed by single line comment //.....
-
-        /*............*/  //....
-/**...*/  //....
-
-/***/
-/*.*//*.*/  //....
-
-/*..*/ l       //.....
-
-more text
-
-line ends with a single line comment //
+import java.util.*
 
 /**
 .
-...........
-.*/ could this break it? //..............
+.*/
 
-code //........
+        "....",
+        "...",
+        ".....",
+        "........",
+        "......",
+        "...",
+        "....",
+        "......",
+        ".........
+
+
+
+public class someClass {
+    private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
+    private final boolean DEBUG = true;
+    private String testVar = ".....";
+    public String testVar2 = "..";
+    some nonesense with no equals
+
+    public void runValidation(String[] arguments) {
+
+        for (true) {
+
+        }
+        if (true) {
+
+        } else if (true) {
+
+        } else {
+
+        }
+        while (true) {
+
+        }
+        do while() {
+
+        }
+        //.....................
+        if (!numberOfArgumentsPassed(arguments)) {
+            return;
+        }
+
+        if (DEBUG) {
+            File file = new File(arguments[0]);
+            String path = file.getAbsolutePath();
+            System.out.println(arguments[0]);
+            System.out.println(path);
+        } else if (true) {
+            //......
+        } else {
+            //............
+
+        }
+
+        while (true) {
+            //.............
+            break;
+        }
+        for (int i = 0; i < 10; i++) {
+            //..............
+            return;
+        }
+
+        /*
+
+....................................
+
+........*/
+         */
+        //..................................................................
+        SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
+        MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
+
+        //.....................................
+        myMultiLineValidator.runMultiLineValidation();
+        mySingleLineValidator.runSingleLineValidation();
+
+        //....................................
+        mySingleLineValidator.outputErrors();
+        /**................*/
+
+        ErrorFileWriter myWriter = new ErrorFileWriter();  //......................................................
+        myWriter.writeMarkupFile(arguments[0]);
+        //..................................................................
+    }
+
+    /**
+..............................................................................
+.....
+..........................................................
+.......................................................................
+.....*/
+
+
+    private boolean numberOfArgumentsPassed(String[] arguments) {
+        if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
+            return true;
+        } else {
+            System.out.println("............................" + REQUIRED_NUMBER_OF_ARGUMENTS + "........................................");  /*...*/
+            return false;
+        }
+    }
+
+    public void function() {
+
+    }
+
+    public void anotherFunction() {
+
+
+
+
+    }
+}
+
+//..................................................................................................................
+
+
+//..................................................................................................................
+
+
+.

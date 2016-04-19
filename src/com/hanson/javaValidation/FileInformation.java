@@ -11,105 +11,49 @@ import java.util.*;
  * Created by student on 3/1/16.
  */
 public class FileInformation {
-    private QuoteAndCommentReplacer quoteAndTextReplacer;
-    private ClassAndFunctionBoundsFinder classAndFunctionBoundsFinder;
+    private QuoteAndCommentReplacer quoteAndTextReplacer;                   //Sanitizes the passed file contents
+    private ClassAndFunctionBoundsFinder classAndFunctionBoundsFinder;      //Finds class and functions bounds
+    private KeywordFinder keywordFinder;
 
-    private List<String> keywords;
-    private FileParser fileParser;
+    private List<String> fileContents;                // Holds original file contents
+    private List<KeywordInstance> lineInformation;     // List that holds where keywords were found in the file contents
+    private List<String> sanitizedFileContents;       // Holds the contents sanitized by quoteAndTextReplacer
 
-    private List<int[]> lineInformation;
-    private List<String> fileContents;
-    private List<String> sanitizedFileContents;
-
-    FileInformation(FileParser parser) {
+    FileInformation(List<String> contents) {
         lineInformation = new ArrayList<>();
-        keywords = new ArrayList<>();
 
         //**********************************************************************************************
         // TODO: Figure out pass by reference issues, how to maintain original file contents?
         sanitizedFileContents = new ArrayList<>();
-        fileContents = parser.getFileContents();
-        fileParser = parser;
-        quoteAndTextReplacer = new QuoteAndCommentReplacer(fileParser.getFileContents());
+        fileContents = contents;
+        quoteAndTextReplacer = new QuoteAndCommentReplacer(contents);
         //**********************************************************************************************
 
         classAndFunctionBoundsFinder = new ClassAndFunctionBoundsFinder();
+        keywordFinder = new KeywordFinder();
     }
 
-    public List getLineINformation() {
+    public List<KeywordInstance> getLineInformation() {
         return lineInformation;
     }
     public List<String> getFileContents() {return sanitizedFileContents;};
     public List<String> getOriginalFileContents() {return fileContents;};
 
     /**
-     * Stores information about the file in a list.
+     * Sanitizes the file content and runs the information gatherers on the sanitized file content
      */
     public void runFileInformation() {
+        // Get sanitized file contents
         quoteAndTextReplacer.replaceQuotesAndComments();
         sanitizedFileContents = quoteAndTextReplacer.getFileContents();
+
+        // Find Function bounds of file contents
         classAndFunctionBoundsFinder.findClassAndFunctionBounds(sanitizedFileContents);
 
-        generateKeywordList();
 
-        System.out.println(sanitizedFileContents.size());
-        for (int index = 0; index < sanitizedFileContents.size(); index ++) {
-            runInfoGatherers(index + 1, sanitizedFileContents.get(index));
-        }
-    }
-
-    private void runInfoGatherers(int lineNumber, String lineText) {
-        for (String keyword : keywords) {
-            checkKeyword(lineNumber, lineText, keyword);
-        }
-    }
-
-    private void checkKeyword(int lineNumber, String lineText, String keyword) {
-        if (lineText.contains(keyword)) {
-            System.out.println("found code: " + keywordDecode.decodeKeyword(keyword) + ". On line " + lineNumber + ".  Keyword: " + keyword);
-            addLineInformation(lineNumber, keywordDecode.decodeKeyword(keyword));
-        }
-    }
-
-    private void addLineInformation(int lineNumber, int lineCode) {
-        int[] tempArray = {lineNumber, lineCode};
-        lineInformation.add(tempArray);
-    }
-
-    public void debugTerminalOutput () {
-        for (int i = 0; i < lineInformation.size(); i++) {
-            System.out.println("Line type: " + lineInformation.get(i)[1] + ". On line: " + lineInformation.get(i)[0]);
-        }
-    }
-
-    // Enum of keywords to search for
-    private enum Keyword {
-        FOR(" for"),
-        IF(" if"),
-        ELSE(" else"),
-        ELSE_IF(" else if"),
-        WHILE(" while"),
-        DO(" do"),
-        TRY(" try"),
-        CATCH(" catch"),
-        DO_WHILE(" do while");
-
-        private String value;
-
-        Keyword(String value) {
-            this.value = value;
-        }
-
-        public String getKeywordString() {
-            return value;
-        }
+        //Find Keywords in file contents
+        keywordFinder.generateSingleLineInformation(sanitizedFileContents, classAndFunctionBoundsFinder);
+        lineInformation = keywordFinder.getKeywords();
 
     }
-
-    private void generateKeywordList() {
-        for (Keyword key : Keyword.values()) {
-            keywords.add(key.getKeywordString());
-        }
-    }
-
 }

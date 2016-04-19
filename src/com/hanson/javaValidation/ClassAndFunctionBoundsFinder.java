@@ -35,6 +35,16 @@ public class ClassAndFunctionBoundsFinder {
 
     }
 
+    public FunctionBounds getClassBounds() {
+        return classBounds;
+    }
+    public FunctionBounds getFirstFunctionBounds() {
+        if(!functionBoundsList.isEmpty()) {
+            return functionBoundsList.get(0);
+        }
+        else return null;
+    }
+
     public void findClassAndFunctionBounds(List<String> contents) {
         fileContents = contents;
 

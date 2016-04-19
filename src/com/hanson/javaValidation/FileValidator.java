@@ -42,7 +42,7 @@ public class FileValidator {
 
         // Create fileInformation object and run its main method
         //TODO: Change to pass in list<string> instead of parser object
-        FileInformation myFileInformation = new FileInformation(myFileParser);
+        FileInformation myFileInformation = new FileInformation(myFileParser.getFileContents());
         myFileInformation.runFileInformation();
 
         // Create validation objects using file provided by command line arg
@@ -66,7 +66,7 @@ public class FileValidator {
         
 
         if (DEBUG) {
-            myFileInformation.debugTerminalOutput();
+            //myFileInformation.debugTerminalOutput();
         }
 
     }
