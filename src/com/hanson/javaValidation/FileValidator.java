@@ -45,7 +45,7 @@ public class FileValidator {
         myFileInformation.runFileInformation();
 
         // Create validation objects using file provided by command line arg
-        SingleLineValidator mySingleLineValidator = new SingleLineValidator(myFileParser.getFileContents());
+        SingleLineValidator mySingleLineValidator = new SingleLineValidator(myFileParser.getFileContents(), myFileInformation.getLineInformation());
         MultiLineValidator myMultiLineValidator = new MultiLineValidator(fileName);
 
         // Run both objects' validation methods

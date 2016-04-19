@@ -7,8 +7,7 @@ package com.hanson.javaValidation;
  * Created on 4/19/16.
  * @author Mitchell Hanson
  */
-public class singleLineError {
-    private int lineNumber;
+public class SingleLineError {
     private boolean canBeUnderlined;
     private int openingUnderlineIndex;
     private int closingUnderlineIndex;
@@ -16,7 +15,7 @@ public class singleLineError {
 
     private String errorType;
 
-    public singleLineError(int line, int openingIndex, int closingIndex, String message, String type) {
+    public SingleLineError(int line, int openingIndex, int closingIndex, String message, String type) {
         lineNumber = line;
         canBeUnderlined = true;
         openingUnderlineIndex = openingIndex;
@@ -25,8 +24,30 @@ public class singleLineError {
         errorType = type;
     }
 
-    public singleLineError(int line, String errorMessage, String type) {
+    public SingleLineError(int line, String errorMessage, String type) {
         this(line, -1, -1, errorMessage, type);
         canBeUnderlined = false;
+    }
+
+    private int lineNumber;
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    public boolean isCanBeUnderlined() {
+        return canBeUnderlined;
+    }
+
+    public int getOpeningUnderlineIndex() {
+        return openingUnderlineIndex;
+    }
+
+    public int getClosingUnderlineIndex() {
+        return closingUnderlineIndex;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
