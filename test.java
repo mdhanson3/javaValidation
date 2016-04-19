@@ -18,8 +18,8 @@ import java.util.*
 
 public class someClass {
 public var = 1;
-public var2 = 2;
- public var3 = 3;
+public varOne = 2;
+ public var_Two = 3;
     public var4 = 4;
     private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
     private final boolean DEBUG = true;

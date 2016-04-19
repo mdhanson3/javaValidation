@@ -46,17 +46,16 @@ public class SingleLineValidator {
 
             switch(key.getKeyword()) {
                 case "public" :
-                    System.out.println("SWITCH found public: " + key.getLineNumber() + ". Keyword: " + key.getKeyword());
-                    createPublicError(key);
+                    createErrorWithKeywordIndices(key, "Public variable found.", "public", "public");
                     break;
 
                 case "constant" :
-                    System.out.println("SWITCH found final: " + key.getLineNumber() + ". Keyword: " + key.getKeyword());
                     checkConstantSyntax(key);
                     break;
 
                 case "variable" :
                     System.out.println("SWITCH found variable: " + key.getLineNumber() + ". Keyword: " + key.getKeyword());
+                    checkVariableSyntax(key);
                     break;
 
                 default :
@@ -70,7 +69,16 @@ public class SingleLineValidator {
         boolean correctSyntax = Pattern.matches("^[A-Z_]*", constantName);
         return correctSyntax;
     }
-    private String getConstantNameByKey(KeywordInstance key) {
+
+    private boolean variableHasCorrectSyntax(String variableName) {
+        boolean correctSyntax = false;
+        if (Pattern.matches("^[a-z]+[a-zA-Z]*", variableName)) {
+            System.out.println("-------matching regex-------");
+            correctSyntax = true;
+        }
+        return correctSyntax;
+    }
+    private String getVariableNameByKey(KeywordInstance key) {
         // Get the substring from index 0 to the first index of "="
         String stringBeforeEqualsSign = fileContents.get(key.getLineNumber() - 1).substring(0, fileContents.get(key.getLineNumber() - 1).indexOf("="));
 
@@ -81,17 +89,23 @@ public class SingleLineValidator {
         return splitString[splitString.length - 1];
     }
 
+    private void checkVariableSyntax(KeywordInstance key) {
+        System.out.println("IN CHECK VARIABLE SYNTAX");
+        String variableName = getVariableNameByKey(key);
+        if (!variableHasCorrectSyntax(variableName)) {
+            createErrorWithKeywordIndices(key, "Variable contains illegal characters.", "variable", variableName);
+        }
+    }
     private void checkConstantSyntax(KeywordInstance key) {
-        System.out.println("IN CHECK CONSTANT SYNTAX");
-        String constantName = getConstantNameByKey(key);
+        String constantName = getVariableNameByKey(key);
         if (!constantHasCorrectSyntax(constantName)) {
-            createErrorWithKeywordIndices()
+            createErrorWithKeywordIndices(key, "Constant contains illegal characters.", "constant", constantName);
         }
 
     }
-    private void createPublicError(KeywordInstance key) {
-        int[] indices = getUnderlineIndicesBySubstring(key.getLineNumber(), "public");
-        singleLineErrors.add(new SingleLineError(key.getLineNumber(), indices[0], indices[1] + 5, "public instance variable", "public"));
+    private void createErrorWithKeywordIndices(KeywordInstance key, String errorMessage, String errorType, String underlineString) {
+        int[] indices = getUnderlineIndicesBySubstring(key.getLineNumber(), underlineString);
+        singleLineErrors.add(new SingleLineError(key.getLineNumber(), indices[0], indices[1] + 5, errorMessage, errorType));
     }
 
     private void checkEachLine() {
