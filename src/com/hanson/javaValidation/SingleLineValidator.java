@@ -2,22 +2,23 @@ package com.hanson.javaValidation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by student on 2/10/16.
  */
 public class SingleLineValidator {
+    private FileInformation fileInformation;
     private List<String> fileContents;
     private List<KeywordInstance> keywords;
     private List<SingleLineError> singleLineErrors;
 
-    SingleLineValidator(List<String> content, List<KeywordInstance> listOfKeywords) {
-        fileContents = new ArrayList<>();
+    SingleLineValidator(FileInformation information) {
         singleLineErrors = new ArrayList<>();
-        keywords = new ArrayList<>();
+        fileInformation = information;
 
-        keywords = listOfKeywords;
-        fileContents = content;
+        keywords = fileInformation.getLineInformation();
+        fileContents = fileInformation.getFileContents();
     }
 
     public void runSingleLineValidation() {
@@ -35,6 +36,10 @@ public class SingleLineValidator {
 
     }
 
+    /**
+     * This method runs a switch on the entire line information list and runs the appropriate validation method on
+     * each one.
+     */
     private void checkLineInformation() {
         for(KeywordInstance key : keywords) {
             //System.out.println(key.getKeyword() + " " + key.getLineNumber());
@@ -42,11 +47,12 @@ public class SingleLineValidator {
             switch(key.getKeyword()) {
                 case "public" :
                     System.out.println("SWITCH found public: " + key.getLineNumber() + ". Keyword: " + key.getKeyword());
-                    //createPublicError(key);
+                    createPublicError(key);
                     break;
 
-                case "final" :
+                case "constant" :
                     System.out.println("SWITCH found final: " + key.getLineNumber() + ". Keyword: " + key.getKeyword());
+                    checkConstantSyntax(key);
                     break;
 
                 case "variable" :
@@ -59,6 +65,35 @@ public class SingleLineValidator {
             }
         }
     }
+
+    private boolean constantHasCorrectSyntax(String constantName) {
+        boolean correctSyntax = Pattern.matches("^[A-Z_]*", constantName);
+        return correctSyntax;
+    }
+    private String getConstantNameByKey(KeywordInstance key) {
+        // Get the substring from index 0 to the first index of "="
+        String stringBeforeEqualsSign = fileContents.get(key.getLineNumber() - 1).substring(0, fileContents.get(key.getLineNumber() - 1).indexOf("="));
+
+        // Split the string with any amount of spaces as delimiter
+        String[] splitString = stringBeforeEqualsSign.split("\\s+");
+
+        //Return the last string in the array (should be the last word before the "=", or the constant name
+        return splitString[splitString.length - 1];
+    }
+
+    private void checkConstantSyntax(KeywordInstance key) {
+        System.out.println("IN CHECK CONSTANT SYNTAX");
+        String constantName = getConstantNameByKey(key);
+        if (!constantHasCorrectSyntax(constantName)) {
+            createErrorWithKeywordIndices()
+        }
+
+    }
+    private void createPublicError(KeywordInstance key) {
+        int[] indices = getUnderlineIndicesBySubstring(key.getLineNumber(), "public");
+        singleLineErrors.add(new SingleLineError(key.getLineNumber(), indices[0], indices[1] + 5, "public instance variable", "public"));
+    }
+
     private void checkEachLine() {
         for(int lineNumber = 0; lineNumber < fileContents.size(); lineNumber++) {
             checkLineLength(lineNumber, fileContents.get(lineNumber));
@@ -67,7 +102,7 @@ public class SingleLineValidator {
 
     private void checkLineLength(int lineNumber, String lineText) {
         if (lineText.length() > 80) {
-            singleLineErrors.add(new SingleLineError(lineNumber, 0, lineText.length(), "Line longer than 80 characters", "LineLength"));
+            singleLineErrors.add(new SingleLineError(lineNumber + 1, 0, lineText.length(), "Line longer than 80 characters", "LineLength"));
         }
     }
 
@@ -75,5 +110,18 @@ public class SingleLineValidator {
         for (SingleLineError error : singleLineErrors) {
             System.out.println("Line " + error.getLineNumber() + " " + error.getErrorMessage());
         }
+    }
+
+    // Find the start and end of the specified keyword in the line
+    private int[] getUnderlineIndicesBySubstring(int lineNumber, String substring) {
+        int openingIndex = fileContents.get(lineNumber - 1).indexOf("public");
+        int closingIndex = openingIndex + substring.length();
+//        System.out.println("opening index: " + openingIndex);
+//        System.out.println("closing index: " + closingIndex);
+//        System.out.println(fileContents.get(lineNumber - 1).substring(openingIndex, closingIndex));
+
+        int[] indices = new int[]{openingIndex, closingIndex};
+
+        return indices;
     }
 }

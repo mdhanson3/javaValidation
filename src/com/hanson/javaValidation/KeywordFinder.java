@@ -113,8 +113,10 @@ public class KeywordFinder {
         }
     }
 
+    // TODO:  Will catch var names with 'public' in them.  Originally was looking for ' public' but that missed
+    // any public variables that started as the first character in the line
     private void publicCheck(int lineNumber, String lineContent) {
-        if (lineContent.contains(" public ")) {
+        if (lineContent.contains("public ")) {
             keywords.add(new KeywordInstance(lineNumber + 1, "public"));
             System.out.println("PUBLIC FOUND: " + lineContent);
         }
