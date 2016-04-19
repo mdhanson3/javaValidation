@@ -80,7 +80,6 @@ public class KeywordFinder {
 
     private boolean checkKeyword(int lineNumber, String lineText, String keyword) {
         if (lineText.contains(keyword)) {
-            //System.out.println("found code: " + keywordDecode.decodeKeyword(keyword) + ". On line " + lineNumber + ".  Keyword: " + keyword);
             keywords.add(new KeywordInstance(lineNumber + 1, keyword));
             return true;
         }
@@ -89,7 +88,6 @@ public class KeywordFinder {
     }
 
     private void findInstanceVariablesAndConstants(ClassAndFunctionBoundsFinder boundsFinder, List<String> contents) {
-        System.out.println("in find instance variables and constants");
         FunctionBounds classBounds =  boundsFinder.getClassBounds();
         FunctionBounds firstFunctionBounds = boundsFinder.getFirstFunctionBounds();
 
