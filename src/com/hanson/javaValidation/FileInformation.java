@@ -38,6 +38,7 @@ public class FileInformation {
     }
     public List<String> getFileContents() {return sanitizedFileContents;};
     public List<String> getOriginalFileContents() {return fileContents;};
+    public ClassAndFunctionBoundsFinder getClassAndFunctionBoundsFinder() {return classAndFunctionBoundsFinder;};
 
     /**
      * Sanitizes the file content and runs the information gatherers on the sanitized file content

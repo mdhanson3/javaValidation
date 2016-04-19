@@ -12,6 +12,8 @@ import java.util.List;
  * @author Mitchell Hanson
  */
 public class ClassAndFunctionBoundsFinder {
+
+
     private List<FunctionBounds> functionBoundsList;
     private FunctionBounds classBounds;
     private List<String> fileContents;
@@ -43,6 +45,9 @@ public class ClassAndFunctionBoundsFinder {
             return functionBoundsList.get(0);
         }
         else return null;
+    }
+    public List<FunctionBounds> getFunctionBoundsList() {
+        return functionBoundsList;
     }
 
     public void findClassAndFunctionBounds(List<String> contents) {

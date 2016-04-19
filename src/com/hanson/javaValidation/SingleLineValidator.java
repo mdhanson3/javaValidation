@@ -2,6 +2,7 @@ package com.hanson.javaValidation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -11,7 +12,9 @@ public class SingleLineValidator {
     private FileInformation fileInformation;
     private List<String> fileContents;
     private List<KeywordInstance> keywords;
-    private List<SingleLineError> singleLineErrors;
+    private List<FunctionBounds> functionBoundsList;
+    private FunctionBounds classBounds;
+    private List<SingleLineError> singleLineErrors;     //Holds each single-line error found
 
     SingleLineValidator(FileInformation information) {
         singleLineErrors = new ArrayList<>();
@@ -19,22 +22,24 @@ public class SingleLineValidator {
 
         keywords = fileInformation.getLineInformation();
         fileContents = fileInformation.getFileContents();
+        classBounds = fileInformation.getClassAndFunctionBoundsFinder().getClassBounds();
+        functionBoundsList = fileInformation.getClassAndFunctionBoundsFinder().getFunctionBoundsList();
     }
 
     public void runSingleLineValidation() {
         // Check every line for these errors
         checkEachLine();
 
-        checkLineInformation();
         // Check each occurrence of found keywords for specific errors
         // Test that each keyword is followed by a single space
         // Test that each constant name is all uppercase and underscores
         // Test that each variable name starts with a lowercase and is all letters
+        checkLineInformation();
 
         // Test that each function opening line open paren is not preceded by a space
         // Test that each function name is starts with a lowercase and is all letters
         // Test that each class name starts with Uppercase and is all letters
-
+        checkFunctionAndClassLines();
     }
 
     /**
@@ -63,6 +68,11 @@ public class SingleLineValidator {
         }
     }
 
+    private void checkFunctionAndClassLines() {
+//        checkClassSyntax();
+//        checkFunctionSyntax();
+//        checkFunctionSpace();
+    }
     private void checkKeywordSpacing(KeywordInstance key) {
         // Get string from linenumber
         String lineText = fileContents.get(key.getLineNumber() - 1);
