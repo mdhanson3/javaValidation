@@ -42,7 +42,6 @@ public class SingleLineValidator {
      */
     private void checkLineInformation() {
         for(KeywordInstance key : keywords) {
-            //System.out.println(key.getKeyword() + " " + key.getLineNumber());
 
             switch(key.getKeyword()) {
                 case "public" :
@@ -54,7 +53,6 @@ public class SingleLineValidator {
                     break;
 
                 case "variable" :
-                    System.out.println("SWITCH found variable: " + key.getLineNumber() + ". Keyword: " + key.getKeyword());
                     checkVariableSyntax(key);
                     break;
 
@@ -130,9 +128,6 @@ public class SingleLineValidator {
     private int[] getUnderlineIndicesBySubstring(int lineNumber, String substring) {
         int openingIndex = fileContents.get(lineNumber - 1).indexOf("public");
         int closingIndex = openingIndex + substring.length();
-//        System.out.println("opening index: " + openingIndex);
-//        System.out.println("closing index: " + closingIndex);
-//        System.out.println(fileContents.get(lineNumber - 1).substring(openingIndex, closingIndex));
 
         int[] indices = new int[]{openingIndex, closingIndex};
 
