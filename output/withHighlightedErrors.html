@@ -32,101 +32,111 @@ Line number 31
 Line number 32         for (true) {
 Line number 33 
 Line number 34         }
-Line number 35         if (true) {
+Line number 35         for(true) {
 Line number 36 
-Line number 37         } else if (true) {
-Line number 38 
-Line number 39         } else {
-Line number 40 
-Line number 41         }
-Line number 42         while (true) {
+Line number 37         }
+Line number 38         if(true) {
+Line number 39 
+Line number 40         } else if(true){{{{{{{
+Line number 41 
+Line number 42         } else{
 Line number 43 
-Line number 44         }
-Line number 45         do while() {
+Line number 44         } else
+Line number 45         if (true) {
 Line number 46 
-Line number 47         }
-Line number 48         // Check number of args
-Line number 49         if (!numberOfArgumentsPassed(arguments)) {
-Line number 50             return;
+Line number 47         } else if (true) {
+Line number 48 
+Line number 49         } else {
+Line number 50 
 Line number 51         }
-Line number 52 
-Line number 53         if (DEBUG) {
-Line number 54             File file = new File(arguments[0]);
-Line number 55             String path = file.getAbsolutePath();
-Line number 56             System.out.println(arguments[0]);
-Line number 57             System.out.println(path);
-Line number 58         } else if (true) {
-Line number 59             // stuff
-Line number 60         } else {
-Line number 61             // other stuff
+Line number 52         while (true) {
+Line number 53 
+Line number 54         }
+Line number 55         do while() {
+Line number 56 
+Line number 57         }
+Line number 58         // Check number of args
+Line number 59         if (!numberOfArgumentsPassed(arguments)) {
+Line number 60             return;
+Line number 61         }
 Line number 62 
-Line number 63         }
-Line number 64 
-Line number 65         while (true) {
-Line number 66             // do something
-Line number 67             break;
-Line number 68         }
-Line number 69         for (int i = 0; i < 10; i++) {
-Line number 70             //<code>s</code>
-Line number 71             return;
-Line number 72         }
-Line number 73 
-Line number 74         /*
-Line number 75 
-Line number 76             Random multi-line comment
-Line number 77 
-Line number 78         */
-Line number 79          */
-Line number 80         // Create validation objects using file provided by command line arg
-Line number 81         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
-Line number 82         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
+Line number 63         if (DEBUG) {
+Line number 64             File file = new File(arguments[0]);
+Line number 65             String path = file.getAbsolutePath();
+Line number 66             System.out.println(arguments[0]);
+Line number 67             System.out.println(path);
+Line number 68         } else if (true) {
+Line number 69             // stuff
+Line number 70         } else {
+Line number 71             // other stuff
+Line number 72 
+Line number 73         }
+Line number 74 
+Line number 75         while (true) {
+Line number 76             // do something
+Line number 77             break;
+Line number 78         }
+Line number 79         for (int i = 0; i < 10; i++) {
+Line number 80             //<code>s</code>
+Line number 81             return;
+Line number 82         }
 Line number 83 
-Line number 84         // Run both objects' validation methods
-Line number 85         myMultiLineValidator.runMultiLineValidation();
-Line number 86         mySingleLineValidator.runSingleLineValidation();
+Line number 84         /*
+Line number 85 
+Line number 86             Random multi-line comment
 Line number 87 
-Line number 88         //System.out.println(multiLineErrors);
-Line number 89         mySingleLineValidator.outputErrors();
-Line number 90         /** bunch of stuff */
-Line number 91 
-Line number 92         ErrorFileWriter myWriter = new ErrorFileWriter();  //this does something "and something quoted" /*    */ //
-Line number 93         myWriter.writeMarkupFile(arguments[0]);
-Line number 94         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
-Line number 95     }
-Line number 96 
-Line number 97     /**
-Line number 98      * Checks that the number of arguments passed to the application is correct
-Line number 99      *
-Line number 100      * @param arguments arguments passed to the application
-Line number 101      * @return returns true if the number of arguments passed is correct
-Line number 102      */
-Line number 103 
-Line number 104 
-Line number 105     private boolean numberOfArgumentsPassed(String[] arguments) {
-Line number 106         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
-Line number 107             return true;
-Line number 108         } else {
-Line number 109             System.out.println("This prog\"ram //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run//. Exiting application");  /* " */
-Line number 110             return false;
-Line number 111         }
-Line number 112     }
+Line number 88         */
+Line number 89          */
+Line number 90         // Create validation objects using file provided by command line arg
+Line number 91         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
+Line number 92         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
+Line number 93 
+Line number 94         // Run both objects' validation methods
+Line number 95         myMultiLineValidator.runMultiLineValidation();
+Line number 96         mySingleLineValidator.runSingleLineValidation();
+Line number 97 
+Line number 98         //System.out.println(multiLineErrors);
+Line number 99         mySingleLineValidator.outputErrors();
+Line number 100         /** bunch of stuff */
+Line number 101 
+Line number 102         ErrorFileWriter myWriter = new ErrorFileWriter();  //this does something "and something quoted" /*    */ //
+Line number 103         myWriter.writeMarkupFile(arguments[0]);
+Line number 104         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
+Line number 105     }
+Line number 106 
+Line number 107     /**
+Line number 108      * Checks that the number of arguments passed to the application is correct
+Line number 109      *
+Line number 110      * @param arguments arguments passed to the application
+Line number 111      * @return returns true if the number of arguments passed is correct
+Line number 112      */
 Line number 113 
-Line number 114     public void function() {
-Line number 115 
-Line number 116     }
-Line number 117 
-Line number 118     public void anotherFunction() {
-Line number 119 
-Line number 120 
-Line number 121 
-Line number 122 
-Line number 123     }
-Line number 124 }
+Line number 114 
+Line number 115     private boolean numberOfArgumentsPassed(String[] arguments) {
+Line number 116         if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
+Line number 117             return true;
+Line number 118         } else {
+Line number 119             System.out.println("This prog\"ram //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run//. Exiting application");  /* " */
+Line number 120             return false;
+Line number 121         }
+Line number 122     }
+Line number 123 
+Line number 124     public void function() {
 Line number 125 
-Line number 126 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 126     }
 Line number 127 
-Line number 128 
-Line number 129 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 128     public void anotherFunction() {
+Line number 129 
 Line number 130 
 Line number 131 
-Line number 132 .
+Line number 132 
+Line number 133     }
+Line number 134 }
+Line number 135 
+Line number 136 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 137 
+Line number 138 
+Line number 139 //********** - ********** - ********** - ********** - ********** - ********** - ********** - ********** - **********
+Line number 140 
+Line number 141 
+Line number 142 .

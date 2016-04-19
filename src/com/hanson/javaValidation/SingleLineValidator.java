@@ -28,9 +28,10 @@ public class SingleLineValidator {
         checkLineInformation();
         // Check each occurrence of found keywords for specific errors
         // Test that each keyword is followed by a single space
-        // Test that each function opening line open paren is not preceded by a space
         // Test that each constant name is all uppercase and underscores
         // Test that each variable name starts with a lowercase and is all letters
+
+        // Test that each function opening line open paren is not preceded by a space
         // Test that each function name is starts with a lowercase and is all letters
         // Test that each class name starts with Uppercase and is all letters
 
@@ -57,9 +58,42 @@ public class SingleLineValidator {
                     break;
 
                 default :
-                    System.out.println("SWITCH found keyword: " + key.getLineNumber() + ". Keyword: " + key.getKeyword());
+                    checkKeywordSpacing(key);
 
             }
+        }
+    }
+
+    private void checkKeywordSpacing(KeywordInstance key) {
+        // Get string from linenumber
+        String lineText = fileContents.get(key.getLineNumber() - 1);
+        String keyword = key.getKeyword();
+
+        // Get index of keyword
+        int openingIndex = lineText.indexOf(keyword);
+        int closingKeywordIndex = openingIndex + keyword.length();
+        //System.out.println(lineText.substring(openingIndex, closingKeywordIndex + 1));
+
+        // Make sure there is a character after the keyword to check (no index out of bounds errors, please)
+        // If the keyword is the last thing in the line, just skip it.  Bleh.
+        if(closingKeywordIndex >= (lineText.length() )) {
+            System.out.println("do not check for space after keyword");
+        }
+
+        // Check that the character immediately next to the key word is not a space
+        else if(lineText.charAt(closingKeywordIndex ) != ' ') {
+
+            // If it is not a space, get the index of the next space after the keyword start index, set this as closing index
+            int closingIndex = lineText.indexOf(" ", closingKeywordIndex);
+
+            // If no space, stringlength - 1 is the closing index
+            if (closingIndex == -1) {
+                closingIndex = lineText.length() - 1;
+            }
+            // Create error with opening underline keyword start, and calculated ending index
+            createErrorWithSpecifiedIndices(key, "Missing space after keyword" + keyword, keyword, openingIndex, closingIndex );
+
+            System.out.println("next symbol not space");
         }
     }
 
@@ -103,7 +137,11 @@ public class SingleLineValidator {
     }
     private void createErrorWithKeywordIndices(KeywordInstance key, String errorMessage, String errorType, String underlineString) {
         int[] indices = getUnderlineIndicesBySubstring(key.getLineNumber(), underlineString);
-        singleLineErrors.add(new SingleLineError(key.getLineNumber(), indices[0], indices[1] + 5, errorMessage, errorType));
+        singleLineErrors.add(new SingleLineError(key.getLineNumber(), indices[0], indices[1], errorMessage, errorType));
+    }
+
+    private void createErrorWithSpecifiedIndices(KeywordInstance key, String errorMessage, String errorType, int openingIndex, int closingIndex) {
+        singleLineErrors.add(new SingleLineError(key.getLineNumber(), openingIndex, closingIndex, errorMessage, errorType));
     }
 
     private void checkEachLine() {
