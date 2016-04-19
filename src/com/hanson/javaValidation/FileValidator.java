@@ -41,17 +41,17 @@ public class FileValidator {
 
 
         // Create fileInformation object and run its main method
-        //TODO: Change to pass in list<string> instead of parser object
         FileInformation myFileInformation = new FileInformation(myFileParser.getFileContents());
         myFileInformation.runFileInformation();
 
         // Create validation objects using file provided by command line arg
-        SingleLineValidator mySingleLineValidator = new SingleLineValidator(fileName);
+        SingleLineValidator mySingleLineValidator = new SingleLineValidator(myFileParser.getFileContents());
         MultiLineValidator myMultiLineValidator = new MultiLineValidator(fileName);
 
         // Run both objects' validation methods
-        myMultiLineValidator.runMultiLineValidation();
         mySingleLineValidator.runSingleLineValidation();
+        myMultiLineValidator.runMultiLineValidation();
+
 
         //System.out.println(multiLineErrors);
         mySingleLineValidator.outputErrors();
@@ -63,11 +63,7 @@ public class FileValidator {
         myWriter.writeFileFromArray(myFileInformation.getOriginalFileContents(), "originalJavaCode.html");
         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
         List<String> originalFile = myFileInformation.getOriginalFileContents();
-        
 
-        if (DEBUG) {
-            //myFileInformation.debugTerminalOutput();
-        }
 
     }
 

@@ -9,29 +9,29 @@ import java.util.List;
  * Created by student on 2/10/16.
  */
 public class SingleLineValidator {
-    private String filePath = null;
-    private List<String[]> singleLineErrors = new ArrayList<>();
+    private List<String> fileContents;
 
-    SingleLineValidator(String path) {
-        filePath = path;
+    private List<String[]> singleLineErrors;
+
+    SingleLineValidator(List<String> content) {
+        fileContents = new ArrayList<>();
+        singleLineErrors = new ArrayList<>();
+
+        fileContents = content;
     }
 
     public void runSingleLineValidation() {
-        int lineNumber = 1;
+        // Check every line for these errors
 
-        // Check each line for each error.  If error is found, add error to array.
-        try (BufferedReader input = new BufferedReader(new FileReader(filePath))) {
-            while (input.ready()) {
-                runErrorTests(lineNumber, input.readLine());
-                lineNumber ++;
-            }
-        } catch (java.io.FileNotFoundException fnfe) {
-            System.out.println("Failed to read input file - File not found");
-            fnfe.printStackTrace();
-        } catch (Exception exception) {
-            System.out.println("Failed to read input file - Generic Error");
-            exception.printStackTrace();
-        }
+
+        // Test line length > 80
+        // Test that each keyword is followed by a single space
+        // Test that each function opening line open paren is not preceded by a space
+        // Test that each constant name is all uppercase and underscores
+        // Test that each variable name starts with a lowercase and is all letters
+        // Test that each function name is starts with a lowercase and is all letters
+        // Test that each class name starts with Uppercase and is all letters
+
     }
 
     private void runErrorTests(int lineNumber, String lineText) {
