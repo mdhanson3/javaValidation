@@ -80,7 +80,7 @@ public class KeywordFinder {
 
     private boolean checkKeyword(int lineNumber, String lineText, String keyword) {
         if (lineText.contains(keyword)) {
-            System.out.println("found code: " + keywordDecode.decodeKeyword(keyword) + ". On line " + lineNumber + ".  Keyword: " + keyword);
+            //System.out.println("found code: " + keywordDecode.decodeKeyword(keyword) + ". On line " + lineNumber + ".  Keyword: " + keyword);
             keywords.add(new KeywordInstance(lineNumber + 1, keyword));
             return true;
         }
@@ -89,6 +89,7 @@ public class KeywordFinder {
     }
 
     private void findInstanceVariablesAndConstants(ClassAndFunctionBoundsFinder boundsFinder, List<String> contents) {
+        System.out.println("in find instance variables and constants");
         FunctionBounds classBounds =  boundsFinder.getClassBounds();
         FunctionBounds firstFunctionBounds = boundsFinder.getFirstFunctionBounds();
 
@@ -106,10 +107,8 @@ public class KeywordFinder {
     private void variableOrConstantCheck(int lineNumber, String lineContent) {
         if (lineContent.contains(" final ")) {
             keywords.add(new KeywordInstance(lineNumber + 1, "constant"));
-            System.out.println("CONSTANT FOUND: " + lineContent);
         } else if (lineContent.contains(" = ")) {
             keywords.add(new KeywordInstance(lineNumber + 1, "variable"));
-            System.out.println("VARIABLE FOUND: " + lineContent);
         }
     }
 
@@ -118,7 +117,6 @@ public class KeywordFinder {
     private void publicCheck(int lineNumber, String lineContent) {
         if (lineContent.contains("public ")) {
             keywords.add(new KeywordInstance(lineNumber + 1, "public"));
-            System.out.println("PUBLIC FOUND: " + lineContent);
         }
     }
 }

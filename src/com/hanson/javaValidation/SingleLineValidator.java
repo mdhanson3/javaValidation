@@ -43,7 +43,6 @@ public class SingleLineValidator {
      */
     private void checkLineInformation() {
         for(KeywordInstance key : keywords) {
-
             switch(key.getKeyword()) {
                 case "public" :
                     createErrorWithKeywordIndices(key, "Public variable found.", "public", "public");
@@ -72,12 +71,10 @@ public class SingleLineValidator {
         // Get index of keyword
         int openingIndex = lineText.indexOf(keyword);
         int closingKeywordIndex = openingIndex + keyword.length();
-        //System.out.println(lineText.substring(openingIndex, closingKeywordIndex + 1));
 
         // Make sure there is a character after the keyword to check (no index out of bounds errors, please)
         // If the keyword is the last thing in the line, just skip it.  Bleh.
         if(closingKeywordIndex >= (lineText.length() )) {
-            System.out.println("do not check for space after keyword");
         }
 
         // Check that the character immediately next to the key word is not a space
@@ -92,8 +89,6 @@ public class SingleLineValidator {
             }
             // Create error with opening underline keyword start, and calculated ending index
             createErrorWithSpecifiedIndices(key, "Missing space after keyword" + keyword, keyword, openingIndex, closingIndex );
-
-            System.out.println("next symbol not space");
         }
     }
 
@@ -105,7 +100,6 @@ public class SingleLineValidator {
     private boolean variableHasCorrectSyntax(String variableName) {
         boolean correctSyntax = false;
         if (Pattern.matches("^[a-z]+[a-zA-Z]*", variableName)) {
-            System.out.println("-------matching regex-------");
             correctSyntax = true;
         }
         return correctSyntax;
@@ -122,7 +116,6 @@ public class SingleLineValidator {
     }
 
     private void checkVariableSyntax(KeywordInstance key) {
-        System.out.println("IN CHECK VARIABLE SYNTAX");
         String variableName = getVariableNameByKey(key);
         if (!variableHasCorrectSyntax(variableName)) {
             createErrorWithKeywordIndices(key, "Variable contains illegal characters.", "variable", variableName);
