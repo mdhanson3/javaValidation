@@ -18,7 +18,7 @@ public class FileValidator {
 
 
     /* TODO: allow arguments array to be greater than one and run validation on every arg
-     * consider using 'throws' to skip over files that cause any errors (handle by outputing error or whatever)
+     * consider using 'throws' to skip over files that cause any errors (handle by outputting error or whatever)
      */
     public void runValidation(String[] arguments) {
         // Check number of args
