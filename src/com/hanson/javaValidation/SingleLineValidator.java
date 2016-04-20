@@ -37,10 +37,10 @@ public class SingleLineValidator {
         checkLineInformation();
 
         // Test that each function opening line open paren is not preceded by a space
+        verifyClassSyntax();
+
         // Test that each function name is starts with a lowercase and is all letters
         // Test that each class name starts with Uppercase and is all letters
-
-        verifyClassSyntax();
         checkFunctions();
     }
 
