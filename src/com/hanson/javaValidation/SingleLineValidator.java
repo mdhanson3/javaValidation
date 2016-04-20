@@ -90,7 +90,6 @@ public class SingleLineValidator {
     private void checkFunctionSpacing(String lineText, int[] functionNameBounds, int lineNumber) {
         if (lineText.length() >= functionNameBounds[1]) {
             if(lineText.charAt(functionNameBounds[1]) != '(') {
-                System.out.println("space between stuff: " + lineNumber);
                 createErrorWithSpecifiedIndices(lineNumber, "Space between function name and parameters.", "functionSpace", functionNameBounds[0], functionNameBounds[1]);
             }
         }
@@ -98,7 +97,6 @@ public class SingleLineValidator {
 
     private void checkFunctionSyntax(String functionName, int[] functionNameBounds, int lineNumber) {
         if (!Pattern.matches("^[a-z]+[a-zA-Z]*", functionName)) {
-            System.out.println("function name sucks: " + functionName);
             createErrorWithSpecifiedIndices(lineNumber, "Function name does not match standards.", "functionName", functionNameBounds[0], functionNameBounds[1]);
         }
     }
@@ -146,7 +144,6 @@ public class SingleLineValidator {
     private boolean checkClassSyntax(String className) {
         boolean matchesPattern = true;
         if (!Pattern.matches("^[A-Z]+[a-zA-Z]*", className)) {
-            System.out.println("class name does not start with capitol letter");
             matchesPattern = false;
         }
         return matchesPattern;
