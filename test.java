@@ -16,7 +16,7 @@ import java.util.*
 
 
 
-public class someClass {
+public class SomeClass {
 
 
 public var = 1;

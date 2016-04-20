@@ -2,7 +2,6 @@ package com.hanson.javaValidation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -39,7 +38,10 @@ public class SingleLineValidator {
         // Test that each function opening line open paren is not preceded by a space
         // Test that each function name is starts with a lowercase and is all letters
         // Test that each class name starts with Uppercase and is all letters
-        checkFunctionAndClassLines();
+
+        verifyClassSyntax();
+        //checkFunctionSyntax();
+        //checkFunctionSpace();
     }
 
     /**
@@ -50,7 +52,7 @@ public class SingleLineValidator {
         for(KeywordInstance key : keywords) {
             switch(key.getKeyword()) {
                 case "public" :
-                    createErrorWithKeywordIndices(key, "Public variable found.", "public", "public");
+                    createErrorWithKeyword(key, "Public variable found.", "public", "public");
                     break;
 
                 case "constant" :
@@ -68,10 +70,48 @@ public class SingleLineValidator {
         }
     }
 
-    private void checkFunctionAndClassLines() {
-//        checkClassSyntax();
-//        checkFunctionSyntax();
-//        checkFunctionSpace();
+    private void verifyClassSyntax() {
+        // isolate class name
+        String className = getClassName();
+        // process class name
+        if (!checkClassSyntax(className)){
+
+        }
+    }
+
+    private boolean checkClassSyntax(String className) {
+        boolean matchesPattern = true;
+        if (!Pattern.matches("^[A-Z]+[a-zA-Z]*", className)) {
+            System.out.println("class name does not start with capitol letter");
+            matchesPattern = false;
+        }
+        return matchesPattern;
+    }
+
+    private String getClassName() {
+        int[] openingAndClosingIndeces = getClassNameIndeces();
+        String lineText = fileContents.get(classBounds.getOpeningLine() - 1);
+        int closingIndex;
+        int openingIndex = lineText.indexOf(" class") + 7;  //First letter of the class name
+        int nextSpace = lineText.indexOf(' ', openingIndex);
+        int nextBracket = lineText.indexOf('{', openingIndex);
+
+        // If you find a space and it is closer than the bracket, use it as the closing index. else use the bracket index.
+        if(nextSpace == -1 ) {
+            closingIndex = nextBracket ;
+        } else if (nextSpace >= nextBracket){
+            closingIndex = nextBracket;
+        } else {
+            closingIndex = nextSpace;
+        }
+
+        String className = lineText.substring(openingIndex, closingIndex);
+
+        return className;
+    }
+
+    private int[] getClassNameIndeces() {
+
     }
     private void checkKeywordSpacing(KeywordInstance key) {
         // Get string from linenumber
@@ -98,7 +138,7 @@ public class SingleLineValidator {
                 closingIndex = lineText.length() - 1;
             }
             // Create error with opening underline keyword start, and calculated ending index
-            createErrorWithSpecifiedIndices(key, "Missing space after keyword" + keyword, keyword, openingIndex, closingIndex );
+            createErrorWithSpecifiedIndices(key.getLineNumber(), "Missing space after keyword" + keyword, keyword, openingIndex, closingIndex );
         }
     }
 
@@ -128,23 +168,23 @@ public class SingleLineValidator {
     private void checkVariableSyntax(KeywordInstance key) {
         String variableName = getVariableNameByKey(key);
         if (!variableHasCorrectSyntax(variableName)) {
-            createErrorWithKeywordIndices(key, "Variable contains illegal characters.", "variable", variableName);
+            createErrorWithKeyword(key, "Variable contains illegal characters.", "variable", variableName);
         }
     }
     private void checkConstantSyntax(KeywordInstance key) {
         String constantName = getVariableNameByKey(key);
         if (!constantHasCorrectSyntax(constantName)) {
-            createErrorWithKeywordIndices(key, "Constant contains illegal characters.", "constant", constantName);
+            createErrorWithKeyword(key, "Constant contains illegal characters.", "constant", constantName);
         }
 
     }
-    private void createErrorWithKeywordIndices(KeywordInstance key, String errorMessage, String errorType, String underlineString) {
+    private void createErrorWithKeyword(KeywordInstance key, String errorMessage, String errorType, String underlineString) {
         int[] indices = getUnderlineIndicesBySubstring(key.getLineNumber(), underlineString);
         singleLineErrors.add(new SingleLineError(key.getLineNumber(), indices[0], indices[1], errorMessage, errorType));
     }
 
-    private void createErrorWithSpecifiedIndices(KeywordInstance key, String errorMessage, String errorType, int openingIndex, int closingIndex) {
-        singleLineErrors.add(new SingleLineError(key.getLineNumber(), openingIndex, closingIndex, errorMessage, errorType));
+    private void createErrorWithSpecifiedIndices(int lineNumber , String errorMessage, String errorType, int openingIndex, int closingIndex) {
+        singleLineErrors.add(new SingleLineError(lineNumber, openingIndex, closingIndex, errorMessage, errorType));
     }
 
     private void checkEachLine() {
