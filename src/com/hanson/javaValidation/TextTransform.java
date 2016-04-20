@@ -12,12 +12,12 @@ public class TextTransform {
 
     public void convertSpacesToHTMLNBS(List<String> contents) {
         System.out.println(contents.size());
-        for (int lineNumber = 0; lineNumber <= contents.size(); lineNumber++) {
+        for (int lineNumber = 0; lineNumber < contents.size(); lineNumber ++) {
             System.out.println(lineNumber);
             System.out.println(contents.get(lineNumber));
             String lineText = contents.get(lineNumber);
-            lineText = lineText.replace("\u00A0"," ");
-            contents.add(lineNumber, lineText);
+            lineText = lineText.replace(" ","\u00A0");
+            contents.set(lineNumber, lineText);
         }
     }
 

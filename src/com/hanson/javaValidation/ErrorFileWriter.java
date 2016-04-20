@@ -9,7 +9,7 @@ import java.io.FileReader;
  * Created by student on 2/9/16.
  */
 public class ErrorFileWriter {
-    private final String HTML_STYLE = "<head><style>.underline {text-decoration: underline; -moz-text-decoration-color: red; /* Code for Firefox */ text-decoration-color: red;} </style> </head>";
+    private final String HTML_STYLE = "<head><meta charset=\"utf-16\"/><style>.underline {text-decoration: underline; -moz-text-decoration-color: red; /* Code for Firefox */ text-decoration-color: red;} </style> </head>";
 
     public void writeMarkupFile(String file) {
         String line = null;

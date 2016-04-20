@@ -1,139 +1,286 @@
-Line number 1 import java.util.*
+Line number 1 package com.hanson.javaValidation;
 Line number 2 
-Line number 3 /**
-Line number 4  *
-Line number 5  */
-Line number 6 
-Line number 7         " for",
-Line number 8         " if",
-Line number 9         " else",
-Line number 10         " else if",
-Line number 11         " while",
-Line number 12         " do",
-Line number 13         " try",
-Line number 14         " catch",
-Line number 15         " do while"
-Line number 16 
-Line number 17 
-Line number 18 
-Line number 19 public class someClass {
-Line number 20 
-Line number 21 
-Line number 22 public var = 1;
-Line number 23 public varOne = 2;
-Line number 24  public var_Two = 3;
-Line number 25     public var4 = 4;
-Line number 26     private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
-Line number 27     private final boolean DEBUG = true;
-Line number 28     private final boolean THIS_WILL_NOT_work_CUZ_LOWERCASE = false;
-Line number 29     private final String thisALsoWontWork = no;
-Line number 30 
-Line number 31     some nonesense with no equals
-Line number 32 
-Line number 33 
-Line number 34     public void runValidation(String[] arguments)           {
-Line number 35 
-Line number 36         for (true) {
-Line number 37 
-Line number 38         }
-Line number 39         for(true) {
-Line number 40 
-Line number 41         }
-Line number 42         if(true) {
+Line number 3 import java.util.ArrayList;
+Line number 4 import java.util.List;
+Line number 5 
+Line number 6 /**
+Line number 7  * This class 'sanitizes' a list of strings that represents the contents of a java file.  It finds the bounds of all
+Line number 8  * quotes, single-line comments, multi-line comments, and javadoc comments then replaces all content within with dots (.).
+Line number 9  * This allows the rest of the validation program run without worrying about whether or not the sentinel characters are
+Line number 10  * actually in a quote or comment.  For example: if the keyword 'for' was in a comment it could break the validator that
+Line number 11  * checks keyword spacing (a false positive would be recorded).
+Line number 12  *
+Line number 13  * Created on 3/30/16.
+Line number 14  * @author Mitchell Hanson
+Line number 15  */
+Line number 16 public class QuoteAndCommentReplacer {
+Line number 17     private int QuoteOpenIndex;
+Line number 18     private int MultiLineOpenCommentIndex;
+Line number 19     private int multiLine_OpenLine;
+Line number 20     private boolean openQuote = false;
+Line number 21     private boolean openMultiLineComment = false;
+Line number 22     private boolean openJavadocComment = false;
+Line number 23     private boolean previousCharacterIsEscape = false;
+Line number 24     private List<SectionToRemove> sectionsToRemove = new ArrayList<>(); //List of sections to remove.
+Line number 25     private List<String> fileContents;  // Contents of file to find and replace text
+Line number 26     public String badVar = yes;
+Line number 27     private final LOWER_Case = nope;
+Line number 28     //private List<String> originalFileContents;
+Line number 29 
+Line number 30     QuoteAndCommentReplacer(List<String> contents) {
+Line number 31         fileContents = contents;
+Line number 32         //TODO: Initialize objects here (remove initialization from above)
+Line number 33     }
+Line number 34 
+Line number 35     public List<String> getFileContents(){
+Line number 36         return fileContents;
+Line number 37     }
+Line number 38     public void replaceQuotesAndComments() {
+Line number 39 
+Line number 40         findTextToRemoveBounds();
+Line number 41         replaceQuotedText();
+Line number 42 
 Line number 43 
-Line number 44         } else if(true){
+Line number 44     }
 Line number 45 
-Line number 46 
-Line number 47                         if (true) {
-Line number 48 
-Line number 49                         } else if (true) {
-Line number 50 
-Line number 51                         } else {
+Line number 46     private void findTextToRemoveBounds() {
+Line number 47         // Find text to replace on each line of the input file
+Line number 48         for (int index = 0; index < fileContents.size(); index ++) {
+Line number 49             removeQuotedAndCommentedText(index + 1, fileContents.get(index));
+Line number 50         }
+Line number 51     }
 Line number 52 
-Line number 53                         }
-Line number 54                         while (true) {
-Line number 55 
-Line number 56                         }
-Line number 57                         do while () {
-Line number 58 
-Line number 59                         }
-Line number 60                         // Check number of args
-Line number 61                         if (!numberOfArgumentsPassed(arguments)) {
-Line number 62                             return;
-Line number 63                         }
-Line number 64 
-Line number 65                         if (DEBUG) {
-Line number 66                             File file = new File(arguments[0]);
-Line number 67                             String path = file.getAbsolutePath();
-Line number 68                             System.out.println(arguments[0]);
-Line number 69                             System.out.println(path);
-Line number 70                         } else if (true) {
-Line number 71                             // stuff
-Line number 72                         } else {
-Line number 73                             // other stuff
+Line number 53     /**
+Line number 54      * This function iterates over each character in the lineText argument and records the bounds of quotations,
+Line number 55      * single-line comments, multi-line comments, and javadoc comments.  This information is later used to remove the
+Line number 56      * text within each so the rest of the validator can work without worrying about quote and comment content.
+Line number 57      *
+Line number 58      * @param lineNumber the current line number of the file
+Line number 59      * @param lineText the line of text corresponding to the line number
+Line number 60      */
+Line number 61     private void removeQuotedAndCommentedText(int lineNumber, String lineText) {
+Line number 62 
+Line number 63         // Iterate over every character in the string searching for quotes or comments
+Line number 64         for(int index = 0; index < lineText.length(); index ++) {
+Line number 65 
+Line number 66             // If an opening quote or comment has been found previously, check the appropriate closing symbols
+Line number 67             if(openQuote) {
+Line number 68                 checkForClosingQuote(lineNumber, lineText, index);
+Line number 69             } else if(openJavadocComment) {
+Line number 70                 index = checkForClosingJavadoc(lineNumber, lineText, index);
+Line number 71             } else if(openMultiLineComment) {
+Line number 72                 index = checkForClosingMultiLine(lineNumber, lineText, index);
+Line number 73             } else{
 Line number 74 
-Line number 75                         }
-Line number 76 
-Line number 77                         while (true) {
-Line number 78                             // do something
-Line number 79                             break;
-Line number 80                         }
-Line number 81                         for (int i = 0; i < 10; i++) {
-Line number 82                             //<code>s</code>
-Line number 83                             return;
-Line number 84                         }
-Line number 85 
-Line number 86         /*
-Line number 87 
-Line number 88             Random multi-line comment
-Line number 89 
-Line number 90         */
-Line number 91                         */
-Line number 92                         // Create validation objects using file provided by command line arg
-Line number 93                         SingleLineValidator mySingleLineValidator = new SingleLineValidator(arguments[0]);
-Line number 94                         MultiLineValidator myMultiLineValidator = new MultiLineValidator(arguments[0]);
-Line number 95 
-Line number 96                         // Run both objects' validation methods
-Line number 97                         myMultiLineValidator.runMultiLineValidation();
-Line number 98                         mySingleLineValidator.runSingleLineValidation();
-Line number 99 
-Line number 100                         //System.out.println(multiLineErrors);
-Line number 101                         mySingleLineValidator.outputErrors();
-Line number 102                         /** bunch of stuff */
-Line number 103 
-Line number 104                         ErrorFileWriter myWriter = new ErrorFileWriter();  //this does something "and something quoted" /*    */ //
-Line number 105                         myWriter.writeMarkupFile(arguments[0]);
-Line number 106                         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
-Line number 107                     }
-Line number 108 
-Line number 109                     /**
-Line number 110                      * Checks that the number of arguments passed to the application is correct
-Line number 111                      *
-Line number 112                      * @param arguments arguments passed to the application
-Line number 113                      * @return returns true if the number of arguments passed is correct
-Line number 114                      */
-Line number 115 
-Line number 116 
-Line number 117                 private boolean numberOfArgumentsPassed (String[]arguments){
-Line number 118                 if (arguments.length == REQUIRED_NUMBER_OF_ARGUMENTS) {
-Line number 119                     return true;
-Line number 120                 } else {
-Line number 121                     System.out.println("This prog\"ram //* requires " + REQUIRED_NUMBER_OF_ARGUMENTS + " arguments to run//. Exiting application");  /* " */
-Line number 122                     return false;
-Line number 123                 }
-Line number 124             }
-Line number 125 
-Line number 126                 public void function () {
-Line number 127 
-Line number 128             }
-Line number 129 
-Line number 130                 public void anotherFunction              () {
-Line number 131 
-Line number 132 
-Line number 133             }
-Line number 134         }
-Line number 135 
-Line number 136         public void MyFunction   ()             {
-Line number 137 
-Line number 138         }
-Line number 139     }
+Line number 75                 // Set index and booleans if quote found
+Line number 76                 if(lineText.charAt(index) == '\"') {
+Line number 77                     openQuote = true;
+Line number 78                     quoteOpenIndex = index;
+Line number 79                 }
+Line number 80 
+Line number 81                 // Look for multi-line comments and javadocs, if there are at least two characters following the /
+Line number 82                 else if(lineText.charAt(index) == '/' ) {
+Line number 83                     if(index < lineText.length() - 2) {
+Line number 84 
+Line number 85                         // If followed by two * then it's a javadoc
+Line number 86                         if(lineText.charAt(index + 1) == '*' && lineText.charAt(index + 2) == '*') {
+Line number 87                             openJavadocComment = true;
+Line number 88                             multiLineOpenCommentIndex = index + 2;
+Line number 89                             multiLineOpenLine = lineNumber;
+Line number 90                             index += 2;
+Line number 91                         }
+Line number 92 
+Line number 93                         // If followed by one * then it's a multi-line comment
+Line number 94                         else if(lineText.charAt(index + 1) == '*') {
+Line number 95                             openMultiLineComment = true;
+Line number 96                             multiLineOpenCommentIndex = index + 1;
+Line number 97                             multiLineOpenLine = lineNumber;
+Line number 98                             index += 1;
+Line number 99                         } else if(lineText.charAt(index + 1) == '/') {
+Line number 100                             SectionToRemove tmpSectionToRemove = new SectionToRemove(lineNumber, index + 1, lineNumber, lineText.length());
+Line number 101                             sectionsToRemove.add(tmpSectionToRemove);
+Line number 102                             return;
+Line number 103                         }
+Line number 104                     }
+Line number 105 
+Line number 106                     // Check only for multi-line comment if there is only one character following the /
+Line number 107                     else if (index < lineText.length() - 1) {
+Line number 108                         if (lineText.charAt(index + 1) == '*') {
+Line number 109                             openMultiLineComment = true;
+Line number 110                             multiLineOpenCommentIndex = index + 1;
+Line number 111                             multiLineOpenLine = lineNumber;
+Line number 112                             index += 1;
+Line number 113                         }
+Line number 114                     }
+Line number 115                 }
+Line number 116             }
+Line number 117         }
+Line number 118     }
+Line number 119 
+Line number 120     /**
+Line number 121      * This function checks the passed string (lineText) at the passed index (index) for the characters that
+Line number 122      * symbolize the closing of a multi-line comment: a star (*) followed by a forward-slash (/).  If found, it sets
+Line number 123      * the instance booleans and adds a SectionToRemove to the sectionsToRemove list. If the closing characters are found
+Line number 124      * the returned index is incremented to skip over the forward-slash.
+Line number 125      *
+Line number 126      * @param lineNumber
+Line number 127      * @param lineText
+Line number 128      * @param index
+Line number 129      * @return
+Line number 130      */
+Line number 131     private int checkForClosingMultiLine(int lineNumber, String lineText, int index) {
+Line number 132         // Check for first character of closing comment
+Line number 133         if (lineText.charAt(index) == '*' && (index < lineText.length() - 1)) {
+Line number 134 
+Line number 135             // If first character is found, check it isn't the last character in the string, and that the next
+Line number 136             // character is the second character of the closing comment
+Line number 137             if (lineText.charAt(index + 1) == '/') {
+Line number 138                 SectionToRemove tmpSectionToRemove = new SectionToRemove(multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index);
+Line number 139                 sectionsToRemove.add(tmpSectionToRemove);
+Line number 140                 openMultiLineComment = false;
+Line number 141                 index ++;
+Line number 142             }
+Line number 143         }
+Line number 144         return index;
+Line number 145     }
+Line number 146 
+Line number 147     /**
+Line number 148      * This function checks the passed string (lineText) at the passed index (index) for the characters that
+Line number 149      * symbolize the closing of a javadoc comment: a star (*) followed by a forward-slash (/).  If found, it sets
+Line number 150      * the instance booleans and adds a SectionToRemove to the sectionsToRemove list. If the closing characters are found
+Line number 151      * the returned index is incremented to skip over the forward-slash.
+Line number 152      *
+Line number 153      * @param lineNumber
+Line number 154      * @param lineText
+Line number 155      * @param index
+Line number 156      * @return
+Line number 157      */
+Line number 158     private int checkForClosingJavadoc(int lineNumber, String lineText, int index) {
+Line number 159         // Check for first character of closing comment
+Line number 160         if (lineText.charAt(index) == '*' && (index < lineText.length() - 1)) {
+Line number 161             // If first character is found, check it isn't the last character in the string, and that the next
+Line number 162             // character is the second character of the closing comment
+Line number 163             if (lineText.charAt(index + 1) == '/') {
+Line number 164 
+Line number 165                 SectionToRemove tmpSectionToRemove = new SectionToRemove(multiLineOpenLine, multiLineOpenCommentIndex, lineNumber, index);
+Line number 166                 sectionsToRemove.add(tmpSectionToRemove);
+Line number 167 
+Line number 168                 openJavadocComment = false;
+Line number 169                 index ++;
+Line number 170             }
+Line number 171         }
+Line number 172         return index;
+Line number 173     }
+Line number 174 
+Line number 175     /**
+Line number 176      * Search for a quotation mark not preceded by an escape character.  If found add bounds of quoted text to
+Line number 177      * an int array and add that array to the charactersToRemoveList and set openQuote to false;
+Line number 178      */
+Line number 179     private void checkForClosingQuote(int lineNumber, String lineText, int index) {
+Line number 180         if (lineText.charAt(index) == '\"') {
+Line number 181             if (previousCharacterIsEscape) {
+Line number 182                 previousCharacterIsEscape = false;
+Line number 183             } else {
+Line number 184                 SectionToRemove tmpSectionToRemove = new SectionToRemove(lineNumber, quoteOpenIndex, lineNumber, index);
+Line number 185                 sectionsToRemove.add(tmpSectionToRemove);
+Line number 186 
+Line number 187                 // TODO: Remove this line for when debug complete
+Line number 188                 //quotedTextArray.add(lineText.substring(quoteOpenIndex + 1, index));
+Line number 189                 openQuote = false;
+Line number 190             }
+Line number 191 
+Line number 192         } else if (lineText.charAt(index) == '\\') {
+Line number 193             previousCharacterIsEscape = true;
+Line number 194         }
+Line number 195     }
+Line number 196 
+Line number 197     /**
+Line number 198      * This function iterates over the sectionsToRemove List and uses the bounds information of each SectionToRemove object
+Line number 199      * to replace the text within the fileContents list.
+Line number 200      *
+Line number 201      */
+Line number 202     private void replaceQuotedText() {
+Line number 203         for(int index = 0; index < sectionsToRemove.size(); index ++) {
+Line number 204 
+Line number 205             SectionToRemove tmpSection = sectionsToRemove.get(index);
+Line number 206 
+Line number 207             int openingLine = tmpSection.getOpeningLine();
+Line number 208             int openingIndex = tmpSection.getOpeningIndex();
+Line number 209             int closingLine = tmpSection.getClosingLine();
+Line number 210             int closingIndex = tmpSection.getClosingIndex();
+Line number 211 
+Line number 212 
+Line number 213             // If the text to replace spans only one line, use this simple code.  Else, remove text from each line.
+Line number 214             if (openingLine == closingLine) {
+Line number 215                 if (openingIndex == closingIndex + 1) {
+Line number 216 
+Line number 217                 }
+Line number 218                 else if (openingIndex < closingIndex) {
+Line number 219 
+Line number 220                     String lineText = fileContents.get(openingLine - 1);
+Line number 221                     String replacement = buildDots(openingIndex, closingIndex - 1);
+Line number 222                     String newText;
+Line number 223                     int startIndex = openingIndex + 1;
+Line number 224                     int endIndex = closingIndex;
+Line number 225 
+Line number 226                     if (endIndex >= lineText.length() - 1) {
+Line number 227                         newText = lineText.substring(0, startIndex ) + replacement;
+Line number 228                     } else {
+Line number 229                         newText = lineText.substring(0, startIndex) + replacement + lineText.substring(endIndex, lineText.length());
+Line number 230                     }
+Line number 231 
+Line number 232                     fileContents.set(openingLine - 1, newText);
+Line number 233                 }
+Line number 234 
+Line number 235             } else {
+Line number 236                 int startIndex = openingIndex + 1;
+Line number 237 
+Line number 238                 // Replace all text between the first line number first index and second line number second index
+Line number 239                 for (int currentLineNumber = openingLine; currentLineNumber <= closingLine; currentLineNumber ++) {
+Line number 240 
+Line number 241                     // If this is the last line of text to replace, replace from index 0 to the closing index of the comment
+Line number 242                     if (currentLineNumber == closingLine) {
+Line number 243                         if (closingIndex < 1) {
+Line number 244 
+Line number 245                         } else {
+Line number 246                             String replacement = buildDots(0, closingIndex);
+Line number 247                             String lineText = fileContents.get(currentLineNumber - 1);
+Line number 248 
+Line number 249                             String newText = replacement + lineText.substring(closingIndex);
+Line number 250 
+Line number 251                             fileContents.set(closingLine - 1, newText);
+Line number 252                         }
+Line number 253 
+Line number 254                     }
+Line number 255 
+Line number 256                     // If this is the first line of text to replace, replace from the opening index to the end of the string
+Line number 257                     else if (currentLineNumber == openingLine) {
+Line number 258                         String lineText = fileContents.get(currentLineNumber - 1);
+Line number 259                         String replacement = buildDots(startIndex, lineText.length() - 1);
+Line number 260 
+Line number 261                         String newText = lineText.substring(0, startIndex) + replacement;
+Line number 262 
+Line number 263                         fileContents.set(openingLine -1, newText);
+Line number 264                     }
+Line number 265 
+Line number 266                     // This is a middle line that should entirely be replaced because it is entirely encompassed by
+Line number 267                     // a multi-line comment
+Line number 268                     else {
+Line number 269                         String lineText = fileContents.get(currentLineNumber - 1 );
+Line number 270                         String replacement = buildDots(0, lineText.length() - 1);
+Line number 271 
+Line number 272                         fileContents.set(currentLineNumber - 1, replacement);
+Line number 273                     }
+Line number 274                 }
+Line number 275             }
+Line number 276         }
+Line number 277     }
+Line number 278 
+Line number 279     private String buildDots(int startIndex, int endIndex) {
+Line number 280         String dots = "";
+Line number 281         for (int i = 0; i < (endIndex - startIndex); i ++) {
+Line number 282             dots += ".";
+Line number 283         }
+Line number 284         return dots;
+Line number 285     }
+Line number 286 }
