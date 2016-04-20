@@ -2,6 +2,7 @@ package com.hanson.javaValidation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -70,8 +71,58 @@ public class SingleLineValidator {
     }
 
     private void processFunction(FunctionBounds bounds) {
+        //get line text
+        String lineText = fileContents.get(bounds.getOpeningLine() - 1);
+
+        //get bounds of function name
+        int[] functionNameBounds = getFunctionNameBounds(lineText);
+
+        // isolate function name and check space
+        String functionName = getFunctionName(lineText, functionNameBounds);
+
         // Check naming convention
+        checkFunctionSyntax(functionName, functionNameBounds, bounds.getOpeningLine());
+
         // Check for space after
+        checkFunctionSpacing(lineText, functionNameBounds, bounds.getOpeningLine());
+    }
+
+    private void checkFunctionSpacing(String lineText, int[] functionNameBounds, int lineNumber) {
+        if (lineText.length() >= functionNameBounds[1]) {
+            if(lineText.charAt(functionNameBounds[1]) != '(') {
+                System.out.println("space between stuff: " + lineNumber);
+                createErrorWithSpecifiedIndices(lineNumber, "Space between function name and parameters.", "functionSpace", functionNameBounds[0], functionNameBounds[1]);
+            }
+        }
+    }
+
+    private void checkFunctionSyntax(String functionName, int[] functionNameBounds, int lineNumber) {
+        if (!Pattern.matches("^[a-z]+[a-zA-Z]*", functionName)) {
+            System.out.println("function name sucks: " + functionName);
+            createErrorWithSpecifiedIndices(lineNumber, "Function name does not match standards.", "functionName", functionNameBounds[0], functionNameBounds[1]);
+        }
+    }
+
+    private int[] getFunctionNameBounds(String lineText) {
+        int parenIndex = lineText.indexOf('(');
+        int closingIndex = nextCharacterThatIsNotASpace(lineText, parenIndex) + 1;
+        int openingIndex = lineText.lastIndexOf(' ', closingIndex - 1) + 1;
+
+        return new int[]{openingIndex, closingIndex};
+    }
+    private String getFunctionName(String lineText, int[] functionNameBounds) {
+        String functionName = lineText.substring(functionNameBounds[0], functionNameBounds[1]);
+        return functionName;
+    }
+
+    private int nextCharacterThatIsNotASpace(String string, int startIndex) {
+        for(int characterIndex = startIndex - 1; characterIndex >= 0; characterIndex --) {
+            char currentChar = string.charAt(characterIndex);
+            if(currentChar != ' ') {
+                return characterIndex;
+            }
+        }
+        return -1;
     }
 
     private void checkFunctions() {
@@ -85,6 +136,7 @@ public class SingleLineValidator {
 
         // isolate class name
         String className = getClassName(openingAndClosingIndices[0], openingAndClosingIndices[1]);
+
         // process class name
         if (!checkClassSyntax(className)){
             createErrorWithSpecifiedIndices(lineNumber, "Class name does not follow conventions.", "classError", openingAndClosingIndices[0], openingAndClosingIndices[1]);

@@ -30,7 +30,7 @@ public varOne = 2;
     some nonesense with no equals
 
 
-    public void runValidation(String[] arguments) {
+    public void runValidation(String[] arguments)           {
 
         for (true) {
 
@@ -126,9 +126,13 @@ public varOne = 2;
 
             }
 
-                public void anotherFunction () {
+                public void anotherFunction              () {
 
 
             }
+        }
+
+        public void MyFunction   ()             {
+
         }
     }
