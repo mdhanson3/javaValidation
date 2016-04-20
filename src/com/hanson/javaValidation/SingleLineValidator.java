@@ -40,8 +40,7 @@ public class SingleLineValidator {
         // Test that each class name starts with Uppercase and is all letters
 
         verifyClassSyntax();
-        //checkFunctionSyntax();
-        //checkFunctionSpace();
+        checkFunctions();
     }
 
     /**
@@ -70,12 +69,25 @@ public class SingleLineValidator {
         }
     }
 
+    private void processFunction(FunctionBounds bounds) {
+        // Check naming convention
+        // Check for space after
+    }
+
+    private void checkFunctions() {
+        for(FunctionBounds bounds : functionBoundsList) {
+            processFunction(bounds);
+        }
+    }
     private void verifyClassSyntax() {
+        int[] openingAndClosingIndices = getClassNameIndeces();
+        int lineNumber = classBounds.getOpeningLine();
+
         // isolate class name
-        String className = getClassName();
+        String className = getClassName(openingAndClosingIndices[0], openingAndClosingIndices[1]);
         // process class name
         if (!checkClassSyntax(className)){
-
+            createErrorWithSpecifiedIndices(lineNumber, "Class name does not follow conventions.", "classError", openingAndClosingIndices[0], openingAndClosingIndices[1]);
         }
     }
 
@@ -88,8 +100,16 @@ public class SingleLineValidator {
         return matchesPattern;
     }
 
-    private String getClassName() {
-        int[] openingAndClosingIndeces = getClassNameIndeces();
+    private String getClassName(int openingIndex, int closingIndex) {
+
+        String lineText = fileContents.get(classBounds.getOpeningLine() - 1);
+
+        String className = lineText.substring(openingIndex, closingIndex);
+
+        return className;
+    }
+
+    private int[] getClassNameIndeces() {
         String lineText = fileContents.get(classBounds.getOpeningLine() - 1);
         int closingIndex;
         int openingIndex = lineText.indexOf(" class") + 7;  //First letter of the class name
@@ -105,14 +125,9 @@ public class SingleLineValidator {
             closingIndex = nextSpace;
         }
 
-        String className = lineText.substring(openingIndex, closingIndex);
-
-        return className;
+        return new int[]{openingIndex,closingIndex};
     }
 
-    private int[] getClassNameIndeces() {
-
-    }
     private void checkKeywordSpacing(KeywordInstance key) {
         // Get string from linenumber
         String lineText = fileContents.get(key.getLineNumber() - 1);
