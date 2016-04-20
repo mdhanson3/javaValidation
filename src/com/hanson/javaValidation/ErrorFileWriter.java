@@ -1,5 +1,6 @@
 package com.hanson.javaValidation;
 
+import javax.swing.text.html.HTML;
 import java.io.*;
 import java.util.*;
 import java.io.FileReader;
@@ -8,6 +9,7 @@ import java.io.FileReader;
  * Created by student on 2/9/16.
  */
 public class ErrorFileWriter {
+    private final String HTML_STYLE = "<head><style>.underline {text-decoration: underline; -moz-text-decoration-color: red; /* Code for Firefox */ text-decoration-color: red;} </style> </head>";
 
     public void writeMarkupFile(String file) {
         String line = null;
@@ -48,8 +50,9 @@ public class ErrorFileWriter {
     public void writeFileFromArray(List<String> output, String fileName) {
 
         try(BufferedWriter out = new BufferedWriter(new java.io.FileWriter("output/" + fileName))) {
+            out.write(HTML_STYLE);
            for(String outputLine : output) {
-               out.write(outputLine);
+               out.write(outputLine + "<br />");
                out.newLine();
            }
         } catch (IOException ioException) {

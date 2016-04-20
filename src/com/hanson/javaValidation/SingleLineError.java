@@ -42,12 +42,13 @@ public class SingleLineError {
     public int getOpeningUnderlineIndex() {
         return openingUnderlineIndex;
     }
-
     public int getClosingUnderlineIndex() {
         return closingUnderlineIndex;
     }
-
     public String getErrorMessage() {
         return errorMessage;
+    }
+    public String getErrorType() {
+        return errorType;
     }
 }

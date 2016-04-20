@@ -2,7 +2,6 @@ package com.hanson.javaValidation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -14,6 +13,7 @@ public class SingleLineValidator {
     private List<KeywordInstance> keywords;
     private List<FunctionBounds> functionBoundsList;
     private FunctionBounds classBounds;
+
     private List<SingleLineError> singleLineErrors;     //Holds each single-line error found
 
     SingleLineValidator(FileInformation information) {
@@ -21,9 +21,13 @@ public class SingleLineValidator {
         fileInformation = information;
 
         keywords = fileInformation.getLineInformation();
-        fileContents = fileInformation.getFileContents();
+        fileContents = fileInformation.getSanitizedFileContents();
         classBounds = fileInformation.getClassAndFunctionBoundsFinder().getClassBounds();
         functionBoundsList = fileInformation.getClassAndFunctionBoundsFinder().getFunctionBoundsList();
+    }
+
+    public List<SingleLineError> getSingleLineErrors() {
+        return singleLineErrors;
     }
 
     public void runSingleLineValidation() {
@@ -271,7 +275,7 @@ public class SingleLineValidator {
 
     // Find the start and end of the specified keyword in the line
     private int[] getUnderlineIndicesBySubstring(int lineNumber, String substring) {
-        int openingIndex = fileContents.get(lineNumber - 1).indexOf("public");
+        int openingIndex = fileContents.get(lineNumber - 1).indexOf(substring);
         int closingIndex = openingIndex + substring.length();
 
         int[] indices = new int[]{openingIndex, closingIndex};

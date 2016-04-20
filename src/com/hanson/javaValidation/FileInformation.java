@@ -15,7 +15,7 @@ public class FileInformation {
     private ClassAndFunctionBoundsFinder classAndFunctionBoundsFinder;      //Finds class and functions bounds
     private KeywordFinder keywordFinder;
 
-    private List<String> fileContents;                // Holds original file contents
+    private List<String> originalFileContents;                // Holds original file contents
     private List<KeywordInstance> lineInformation;     // List that holds where keywords were found in the file contents
     private List<String> sanitizedFileContents;       // Holds the contents sanitized by quoteAndTextReplacer
 
@@ -24,8 +24,9 @@ public class FileInformation {
 
         //**********************************************************************************************
         // TODO: Figure out pass by reference issues, how to maintain original file contents?
-        sanitizedFileContents = new ArrayList<>();
-        fileContents = contents;
+
+        sanitizedFileContents = contents;
+        originalFileContents = deepCopy(sanitizedFileContents);
         quoteAndTextReplacer = new QuoteAndCommentReplacer(contents);
         //**********************************************************************************************
 
@@ -36,8 +37,8 @@ public class FileInformation {
     public List<KeywordInstance> getLineInformation() {
         return lineInformation;
     }
-    public List<String> getFileContents() {return sanitizedFileContents;};
-    public List<String> getOriginalFileContents() {return fileContents;};
+    public List<String> getSanitizedFileContents() {return sanitizedFileContents;};
+    public List<String> getOriginalFileContents() {return originalFileContents;};
     public ClassAndFunctionBoundsFinder getClassAndFunctionBoundsFinder() {return classAndFunctionBoundsFinder;};
 
     /**
@@ -56,5 +57,16 @@ public class FileInformation {
         keywordFinder.generateSingleLineInformation(sanitizedFileContents, classAndFunctionBoundsFinder);
         lineInformation = keywordFinder.getKeywords();
 
+    }
+
+    private List<String> deepCopy(List<String> list) {
+        List<String> newList = new ArrayList<>();
+
+        for(String line : list) {
+            String newLine = new String(line);
+            newList.add(newLine);
+        }
+
+        return newList;
     }
 }

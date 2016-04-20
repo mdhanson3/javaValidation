@@ -1,7 +1,6 @@
 package com.hanson.javaValidation;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,6 +51,10 @@ public class FileValidator {
         mySingleLineValidator.runSingleLineValidation();
         myMultiLineValidator.runMultiLineValidation();
 
+        // Insert HTML elements into the file contents
+        TextTransform myTextTransformer = new TextTransform();
+        myTextTransformer.convertSpacesToHTMLNBS(myFileInformation.getOriginalFileContents());
+        myTextTransformer.augmentContentsWithUnderlines(myFileInformation.getOriginalFileContents(), mySingleLineValidator.getSingleLineErrors());
 
         //System.out.println(multiLineErrors);
         mySingleLineValidator.outputErrors();
@@ -59,10 +62,11 @@ public class FileValidator {
         ErrorFileWriter myWriter = new ErrorFileWriter();
         myWriter.writeMarkupFile(fileName);
         //TODO: The output below doesn't work because of pass by reference issues
-        myWriter.writeFileFromArray(myFileInformation.getFileContents(), "cleanJavaCode.html");
+        myWriter.writeFileFromArray(myFileInformation.getSanitizedFileContents(), "cleanJavaCode.html");
         myWriter.writeFileFromArray(myFileInformation.getOriginalFileContents(), "originalJavaCode.html");
         //myWriter.writeSummaryFile("This is the summary", multiLineErrors);
-        List<String> originalFile = myFileInformation.getOriginalFileContents();
+
+
 
 
     }

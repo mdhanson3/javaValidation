@@ -26,6 +26,7 @@ public varOne = 2;
     private final int REQUIRED_NUMBER_OF_ARGUMENTS = 1;
     private final boolean DEBUG = true;
     private final boolean THIS_WILL_NOT_work_CUZ_LOWERCASE = false;
+    private final String thisALsoWontWork = no;
 
     some nonesense with no equals
 
