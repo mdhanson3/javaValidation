@@ -53,7 +53,7 @@ public class FileValidator {
 
         // Insert HTML elements into the file contents
         TextTransform myTextTransformer = new TextTransform();
-        myTextTransformer.convertSpacesToHTMLNBS(myFileInformation.getOriginalFileContents());
+        myTextTransformer.convertSpacesToHtmlNbs(myFileInformation.getOriginalFileContents());
         myTextTransformer.augmentContentsWithUnderlines(myFileInformation.getOriginalFileContents(), mySingleLineValidator.getSingleLineErrors());
 
         //System.out.println(multiLineErrors);

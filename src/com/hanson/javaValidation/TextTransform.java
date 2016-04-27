@@ -10,7 +10,7 @@ public class TextTransform {
     private final String CONSTANT_OPENING_SPAN = "<span class=\"constant underline\">";
     private final String CLOSING_SPAN = "</span>";
 
-    public void convertSpacesToHTMLNBS(List<String> contents) {
+    public void convertSpacesToHtmlNbs(List<String> contents) {
         System.out.println(contents.size());
         for (int lineNumber = 0; lineNumber < contents.size(); lineNumber ++) {
             System.out.println(lineNumber);
