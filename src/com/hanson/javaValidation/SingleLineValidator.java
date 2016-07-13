@@ -206,7 +206,7 @@ public class SingleLineValidator {
                 closingIndex = lineText.length() - 1;
             }
             // Create error with opening underline keyword start, and calculated ending index
-            createErrorWithSpecifiedIndices(key.getLineNumber(), "Missing space after keyword" + keyword, keyword, openingIndex, closingIndex );
+            createErrorWithSpecifiedIndices(key.getLineNumber(), "Missing space after keyword: " + keyword, keyword, openingIndex, closingIndex );
         }
     }
 
